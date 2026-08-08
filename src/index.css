@@ -3,28 +3,32 @@
 /* 1. Yomogiフォントの読み込み */
 @import url('https://fonts.googleapis.com/css2?family=Yomogi&display=swap');
 
-/* 2. けいなんポップ体の読み込み定義 */
+/* 2. けいなんポップ体の読み込み定義（「ー」だけ除外する魔法を指定） */
 @font-face {
   font-family: 'KeinanPop';
   src: url('/KeinanPop.ttf') format('truetype');
   font-display: swap;
+  /* ★ U+30FC（長音「ー」）以外のすべての文字にだけけいなんポップを適用する */
+  unicode-range: U+0000-30FB, U+30FD-10FFFF;
 }
 
 /* 3. クラス定義 */
 .font-pop {
-  font-family: 'KeinanPop', sans-serif !important;
+  font-family: 'KeinanPop', -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", sans-serif !important;
 }
 
-/* ★ ヨモギ用のクラス！ */
+/* ★ ヨモギ用のクラス */
 .font-yomogi {
   font-family: 'Yomogi', cursive, sans-serif !important;
 }
 
+/* 4. 画面全体の設定 & スマホ上下の白チラつき防止 */
 html,
 body,
 #root {
   margin: 0;
   min-height: 100%;
+  background-color: #030712 !important;
 }
 
 html {
