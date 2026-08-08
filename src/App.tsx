@@ -3,7 +3,8 @@ import { useSchedules } from "./hooks/useSchedules";
 import ScheduleCalendar from "./components/calendar/ScheduleCalendar";
 import ScheduleCard from "./components/schedule/ScheduleCard";
 import { ScheduleTabs } from "./components/tab/ScheduleTabs";
-import { CalendarX, Sparkles, X } from "lucide-react";
+import { CalendarX, Sparkles } from "lucide-react";
+import "./App.css";
 
 export default function App() {
   const { schedules = [], loading } = useSchedules();
@@ -35,104 +36,111 @@ export default function App() {
   }
 
   return (
-    // ★ 1. 全体背景は切り抜いた星空画像（star-bg.jpg）を敷き詰める
-    <main className="min-h-screen bg-[#030712] bg-[url('/star-bg.png')] bg-cover bg-center bg-fixed text-white p-3 sm:p-6 md:p-10 flex justify-center items-start">
+    <div className="min-h-screen bg-[#030712] bg-[url('/star-bg.png')] bg-cover bg-center bg-fixed text-white flex flex-col relative">
       
-      {/* ★ 2. CSSで完全に再現した「光るグラデーションネオンフレーム」！ */}
-      <div className="w-full max-w-4xl rounded-3xl p-[3px] bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-500 shadow-[0_0_30px_rgba(56,189,248,0.4),_0_0_60px_rgba(59,130,246,0.2)]">
-        
-        {/* ★ 3. 枠線の内側（黒く引き締めて文字を見やすく＆すりガラス演出） */}
-        <div className="w-full h-full bg-[#070c1a]/85 backdrop-blur-md rounded-[21px] p-6 sm:p-10">
+      {/* ヘッダー */}
+      <header className="site-header">
+        <div className="w-full flex items-center justify-between">
+          <h1 className="site-title">
+            星降る止まり木 -夕星るちあのポータルサイト-
+          </h1>
+        </div>
+      </header>
 
-          {/* ヘッダーエリア */}
-          <header className="mb-6 flex items-center justify-between">
-            <h1 className="font-pop text-2xl md:text-3xl font-bold text-yellow-200 drop-shadow-[0_2px_10px_rgba(254,240,138,0.5)] flex items-center gap-2">
-              🌌 夕星るちあ Portal
-            </h1>
-            {activeTab === "calendar" && selectedDate && (
-              <button
-                onClick={() => setSelectedDate(null)}
-                className="text-xs text-slate-300 hover:text-white flex items-center gap-1 transition-colors bg-white/10 px-3 py-1.5 rounded-full border border-white/10"
-              >
-                <X className="w-3.5 h-3.5" />
-                選択解除
-              </button>
-            )}
-          </header>
+      {/* メインエリア */}
+      <main className="main-container">
+        <div className="bg-overlay" />
 
-          {/* タブエリア */}
-          <div className="mb-8">
+        <div className="w-full max-w-4xl flex flex-col items-center">
+          
+          {/* タブ */}
+          <div className="mb-6 w-full flex justify-center">
             <ScheduleTabs activeTab={activeTab} onTabChange={setActiveTab} />
           </div>
 
-          {/* 【カレンダー タブ】 */}
+          {/* -------------------------------------------------------------
+              【カレンダー タブ】
+             ------------------------------------------------------------- */}
           {activeTab === "calendar" && (
-            <>
-              <ScheduleCalendar
-                schedules={schedules}
-                selectedDate={selectedDate}
-                onSelectDate={(date) => setSelectedDate(date)}
-              />
+            <div className="w-full flex flex-col items-center">
+              
+              {/* カレンダーネオン枠 */}
+              <div className="neon-wrapper-calendar">
+                <div className="neon-inner-calendar">
+                  <ScheduleCalendar
+                    schedules={schedules}
+                    selectedDate={selectedDate}
+                    onSelectDate={(date) => setSelectedDate(date)}
+                  />
+                </div>
+              </div>
 
-              {/* 日付選択時のカード表示 */}
+              {/* 選択した日付の予定カード */}
               {selectedDate && (
-                <section className="mt-8 space-y-4">
+                <section className="mt-6 w-full space-y-4">
                   {selectedDateSchedules.length === 0 ? (
-                    <div className="rounded-xl border border-dashed border-white/20 p-8 text-center text-slate-300 flex flex-col items-center gap-2 bg-black/40 backdrop-blur-md">
+                    <div className="empty-schedule-box">
                       <CalendarX className="w-8 h-8 opacity-60 stroke-[1.5]" />
                       <span>この日の予定はありません</span>
                     </div>
                   ) : (
                     selectedDateSchedules.map((schedule, index) => (
-                      <ScheduleCard
-                        key={schedule.id ?? `${schedule.date}-${index}`}
-                        schedule={schedule}
-                      />
+                      <div key={schedule.id ?? `${schedule.date}-${index}`} className="neon-wrapper-card">
+                        <div className="neon-inner-card">
+                          <ScheduleCard schedule={schedule} />
+                        </div>
+                      </div>
                     ))
                   )}
                 </section>
               )}
-            </>
+            </div>
           )}
 
-          {/* 【リスト -過去- タブ】 */}
+          {/* -------------------------------------------------------------
+              【リスト -過去- タブ】
+             ------------------------------------------------------------- */}
           {activeTab === "past" && (
-            <section className="space-y-4">
+            <section className="w-full space-y-4">
               {pastSchedules.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-white/20 p-8 text-center text-slate-300 bg-black/40 backdrop-blur-md">
+                <div className="empty-schedule-box">
                   過去の予定はありません
                 </div>
               ) : (
                 pastSchedules.map((schedule, index) => (
-                  <ScheduleCard
-                    key={schedule.id ?? `${schedule.date}-${index}`}
-                    schedule={schedule}
-                  />
+                  <div key={schedule.id ?? `${schedule.date}-${index}`} className="neon-wrapper-card">
+                    <div className="neon-inner-card">
+                      <ScheduleCard schedule={schedule} />
+                    </div>
+                  </div>
                 ))
               )}
             </section>
           )}
 
-          {/* 【リスト -未来- タブ】 */}
+          {/* -------------------------------------------------------------
+              【リスト -未来- タブ】
+             ------------------------------------------------------------- */}
           {activeTab === "future" && (
-            <section className="space-y-4">
+            <section className="w-full space-y-4">
               {futureSchedules.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-white/20 p-8 text-center text-slate-300 bg-black/40 backdrop-blur-md">
+                <div className="empty-schedule-box">
                   これからの予定はありません
                 </div>
               ) : (
                 futureSchedules.map((schedule, index) => (
-                  <ScheduleCard
-                    key={schedule.id ?? `${schedule.date}-${index}`}
-                    schedule={schedule}
-                  />
+                  <div key={schedule.id ?? `${schedule.date}-${index}`} className="neon-wrapper-card">
+                    <div className="neon-inner-card">
+                      <ScheduleCard schedule={schedule} />
+                    </div>
+                  </div>
                 ))
               )}
             </section>
           )}
 
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

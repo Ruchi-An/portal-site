@@ -33,7 +33,6 @@ type Props = {
 };
 
 export default function ScheduleCard({ schedule }: Props) {
-  // ★ サムネ拡大モーダルの開閉状態
   const [isImageOpen, setIsImageOpen] = useState(false);
   const isReal = schedule.category === "リアル";
 
@@ -59,9 +58,9 @@ export default function ScheduleCard({ schedule }: Props) {
 
   return (
     <>
-      {/* ★ article にすりガラス背景（bg-black/30 backdrop-blur-md）と青系の光る細枠（border-cyan-500/20）を追加！ */}
-      <article className="schedule-card flex gap-3 p-3 sm:p-4 items-center !bg-slate-950/40 backdrop-blur-md border border-cyan-500/20 rounded-2xl shadow-lg transition-all hover:border-cyan-400/40 hover:shadow-cyan-500/10 hover:shadow-xl">
-        {/* ★ 1. サムネイルエリア */}
+      {/* ★ 不要な border, bg, backdrop-blur, hover を削除してすっきり整理！ */}
+      <article className="schedule-card flex gap-3 p-3 sm:p-4 items-center">
+        {/* サムネイルエリア */}
         {!isReal && (
           <div className="w-28 sm:w-48 shrink-0 self-center flex items-center justify-center">
             {schedule.thumbnail_url ? (
@@ -179,7 +178,7 @@ export default function ScheduleCard({ schedule }: Props) {
         </div>
       </article>
 
-      {/* ★ 2. 画像ポチッと拡大用ポップアップ（オーバーレイ） */}
+      {/* サムネ拡大モーダル */}
       {isImageOpen && schedule.thumbnail_url && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fadeIn"
