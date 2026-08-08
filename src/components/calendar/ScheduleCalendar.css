@@ -1,0 +1,337 @@
+/* ==========================================================================
+   1. カレンダー全体・コンテナ（綺麗なすりガラス感）
+   ========================================================================== */
+.schedule-calendar {
+    padding: 1.5rem;
+    border-radius: 24px;
+    background: rgba(15, 23, 42, 0.4) !important; /* カードとおそろいの濃いめ透け感 */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(6, 182, 212, 0.2) !important; /* ほんのり光る青系の枠線 */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.schedule-calendar .react-calendar {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: white;
+}
+
+/* =====================================================================
+   月移動ナビゲーション
+===================================================================== */
+.schedule-calendar .react-calendar__navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+/* 月タイトル */
+.schedule-calendar .react-calendar__navigation__label {
+    flex-grow: 0 !important;
+    min-width: 160px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .08);
+    border: 1px solid rgba(255, 255, 255, .15);
+    backdrop-filter: blur(10px);
+}
+
+/* 矢印 */
+.schedule-calendar .react-calendar__navigation button {
+    color: white;
+    background: rgba(255, 255, 255, .08);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    transition: .2s;
+}
+
+.schedule-calendar .react-calendar__navigation button:hover {
+    background: rgba(255, 255, 255, .18);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   2. ヘッダーエリア
+   ========================================================================== */
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    padding: 0.5rem 1rem;
+}
+
+.calendar-header-center {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+/* 前月・次月の「✦」ボタン */
+.calendar-nav-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2rem 0.6rem;
+}
+
+.calendar-nav-btn:hover {
+    color: #ffed91;
+    transform: scale(1.3);
+    text-shadow: 0 0 8px rgba(255, 237, 145, 0.6);
+}
+
+/* セルと統一した質感（プルダウン・今日ボタン） */
+.calendar-header select,
+.calendar-today-button {
+    position: relative;
+    height: 2.4rem;
+    padding: 0 1rem;
+    border-radius: 0.85rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+/* プルダウンの選択肢 */
+.calendar-header select option {
+    background-color: #0f172a;
+    color: #ffffff;
+}
+
+/* 今日ボタン */
+.calendar-today-button {
+    white-space: nowrap;
+    background-color: rgba(196, 168, 255, 0.15);
+    border-color: rgba(196, 168, 255, 0.3);
+    color: #e2d5ff;
+    font-weight: 600;
+}
+
+.calendar-header select:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+}
+
+.calendar-today-button:hover {
+    background-color: rgba(196, 168, 255, 0.25);
+    border-color: rgba(196, 168, 255, 0.5);
+    box-shadow: 0 0 12px rgba(196, 168, 255, 0.2);
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   3. 曜日エリア
+   ========================================================================== */
+.schedule-calendar .react-calendar__month-view__weekdays {
+    color: rgba(255, 255, 255, 0.75);
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.schedule-calendar .react-calendar__month-view__weekdays__weekday abbr {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    display: block;
+}
+
+.schedule-calendar .react-calendar__month-view__weekdays__weekday:nth-child(6) abbr {
+    color: #99daff;
+}
+
+.schedule-calendar .react-calendar__month-view__weekdays__weekday:nth-child(7) abbr {
+    color: #ffb1d3;
+}
+
+/* ==========================================================================
+   4. 日付グリッド & セル（基本バブルデザイン）
+   ========================================================================== */
+.schedule-calendar .react-calendar__month-view__days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.schedule-calendar .react-calendar__tile {
+    height: 70px;
+    padding: 0;
+    background: transparent !important;
+    color: white;
+    position: relative;
+}
+
+.schedule-calendar .react-calendar__tile abbr {
+    position: relative;
+    z-index: 2;
+}
+
+/* ★ 通常日（予定なし）：うっすら透けるカプセルバブル */
+.schedule-calendar .react-calendar__tile::before {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.06); /* 白浮きしない控えめな透け感 */
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+}
+
+/* ★ 泡の光沢ハイライト（控えめにして透け感を補強） */
+.schedule-calendar .react-calendar__tile::after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    width: 16px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    filter: blur(1.5px);
+    pointer-events: none;
+    transition: all 0.2s ease;
+}
+
+/* ホバー演出 */
+.schedule-calendar .react-calendar__tile:hover::before {
+    transform: translateY(-2px);
+    background: rgba(56, 189, 248, 0.15); /* ネオンブルーにうっすら光る */
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+/* ==========================================================================
+   5. 状態別（予定あり / 今日 / 選択中）
+   ========================================================================== */
+
+/* ★ 予定あり：ダークブルー系で透け感キープ */
+.schedule-calendar .react-calendar__tile.has-schedule::before {
+    background: rgba(15, 23, 42, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* 【今日】：紫イメージカラーでふんわり発光 */
+.schedule-calendar .react-calendar__tile.is-today::before {
+    background: rgba(196, 168, 255, 0.15) !important;
+    border: 1.5px solid #C4A8FF !important;
+}
+
+/* 【選択中の日】：イエローでくっきりハイライト */
+.schedule-calendar .react-calendar__tile.is-selected::before {
+    background: rgba(253, 255, 119, 0.15) !important;
+    border: 1.5px solid #fdff77 !important;
+    box-shadow: 0 0 15px rgba(253, 255, 119, 0.3) !important;
+}
+
+.schedule-calendar .react-calendar__tile.is-selected abbr {
+    color: #ffffff !important;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(253, 255, 119, 0.8);
+}
+
+/* 日付テキストの色（土・日・祝） */
+.calendar-saturday abbr {
+    color: #99daff;
+}
+
+.calendar-sunday abbr,
+.calendar-holiday abbr {
+    color: #ffb1d3;
+}
+
+.calendar-holiday::before {
+    border-color: rgba(255, 214, 232, 0.3) !important;
+}
+
+/* ==========================================================================
+   6. セル内の星アイコン
+   ========================================================================== */
+.calendar-stars {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    font-size: 11px;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 0 5px currentColor);
+    margin-top: 2px;
+}
+
+.calendar-star-game {
+    color: #C4A8FF;
+}
+
+.calendar-star-scenario {
+    color: #fdff77;
+}
+
+.calendar-star-real {
+    color: #BFEFFF;
+}
+
+/* ==========================================================================
+   スマホ対応
+   ========================================================================== */
+@media (max-width: 640px) {
+  .schedule-calendar {
+    padding: 1.0rem;
+    font-size: 0.85rem;
+  }
+
+  .calendar-header {
+    padding: 0.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .calendar-header-center {
+    gap: 0.3rem;
+  }
+
+  .calendar-nav-btn {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.9rem;
+  }
+
+  .calendar-header select,
+  .calendar-today-button {
+    height: 2rem;
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .react-calendar__month-view__weekdays__weekday {
+    padding: 0.25rem 0;
+    font-size: 0.75rem;
+  }
+
+  .react-calendar__tile {
+    padding: 0.35rem 0.1rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  .calendar-stars {
+    margin-top: 1px;
+    gap: 1px;
+  }
+
+  .calendar-star {
+    font-size: 0.55rem;
+  }
+}

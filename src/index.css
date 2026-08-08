@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+/* 1. Yomogiフォントの読み込み */
+@import url('https://fonts.googleapis.com/css2?family=Yomogi&display=swap');
+
+/* 2. けいなんポップ体の読み込み定義 */
+@font-face {
+  font-family: 'KeinanPop';
+  src: url('/KeinanPop.ttf') format('truetype');
+  font-display: swap;
+}
+
+/* 3. クラス定義 */
+.font-pop {
+  font-family: 'KeinanPop', sans-serif !important;
+}
+
+/* ★ ヨモギ用のクラス！ */
+.font-yomogi {
+  font-family: 'Yomogi', cursive, sans-serif !important;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+html {
+  overflow-y: scroll;
+}

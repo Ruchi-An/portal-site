@@ -1,0 +1,122 @@
+/* ==========================================================================
+   1. カード本体（ベース＆ホバー）
+   ========================================================================== */
+.schedule-card {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.schedule-card:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* ==========================================================================
+   2. カテゴリタグ（ゲーム / シナリオ / リアル）
+   ========================================================================== */
+/* ゲーム：#C4A8FF */
+.schedule-category-game {
+    background: rgba(196, 168, 255, 0.2);
+    color: #C4A8FF;
+    border: 1px solid rgba(196, 168, 255, 0.35);
+}
+
+/* シナリオ：#FDFF77 */
+.schedule-category-scenario {
+    background: rgba(253, 255, 119, 0.15);
+    color: #FDFF77;
+    border: 1px solid rgba(253, 255, 119, 0.35);
+}
+
+/* リアル：#BFEFFF */
+.schedule-category-real {
+    background: rgba(191, 239, 255, 0.2);
+    color: #BFEFFF;
+    border: 1px solid rgba(191, 239, 255, 0.35);
+}
+
+.schedule-category-default {
+    background: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================================================
+   3. ジャンルタグ（マダミス / ストプレ / その他）
+   ========================================================================== */
+.schedule-genre-mystery {
+    background: rgba(248, 113, 113, 0.3);
+    color: #FECACA;
+    border: 1px solid rgba(248, 113, 113, 0.3); /* 枠線色 */
+}
+
+.schedule-genre-story {
+    background: rgba(96, 165, 250, 0.3);
+    color: #BFDBFE;
+    border: 1px solid rgba(96, 165, 250, 0.3); /* 枠線色 */
+}
+
+.schedule-genre-other {
+    background: rgba(74, 222, 128, 0.3);
+    color: #BBF7D0;
+    border: 1px solid rgba(74, 222, 128, 0.3); /* 枠線色 */
+}
+
+.schedule-genre-default {
+    background: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* 枠線色 */
+}
+
+/* ==========================================================================
+   4. リンクボタン（公式 / 配信）
+   ========================================================================== */
+/* ボタン共通ベース */
+.schedule-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* 公式リンク（有効時） */
+.schedule-btn-official {
+  background: rgba(165, 188, 252, 0.15); /* 背景色 */
+  color: #e8eeff;                       /* 文字色 */
+  border: 1px solid rgba(165, 188, 252, 0.4); /* 枠線色 */
+}
+
+.schedule-btn-official:hover {
+  background: rgba(165, 188, 252, 0.2); /* ホバー時の背景色 */
+}
+
+/* 配信リンク（有効時） */
+.schedule-btn-stream {
+  background: rgba(252, 165, 165, 0.1); /* 背景色 */
+  color: #ffe4e6;                       /* 文字色 */
+  border: 1px solid rgba(252, 165, 165, 0.3); /* 枠線色 */
+}
+
+.schedule-btn-stream:hover {
+  background: rgba(252, 165, 165, 0.2); /* ホバー時の背景色 */
+}
+
+/* リンクなし（無効時・共通） */
+.schedule-btn-disabled {
+  background: rgba(255, 255, 255, 0.05);
+  color: #64748b;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: not-allowed;
+}
