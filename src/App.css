@@ -1,6 +1,12 @@
 /* =============================================================
    App.css - メインレイアウト＆ネオン枠スタイリング
    ============================================================= */
+/* index.css または App.css の一番上に追加 */
+html, body {
+  background-color: #030712 !important;
+  margin: 0;
+  padding: 0;
+}
 
 /* ヘッダー */
 .site-header {
@@ -127,4 +133,13 @@
   gap: 0.5rem;
   background-color: rgba(7, 12, 26, 0.85);
   backdrop-filter: blur(12px);
+}
+
+/* -------------------------------------------------------------
+   iPhone(Safari)で「ー」が縦向きになっちゃうバグの対策
+   ------------------------------------------------------------- */
+* {
+  writing-mode: horizontal-tb;
+  font-feature-settings: "vrt2" 0, "vert" 0;
+  -webkit-font-feature-settings: "vrt2" 0, "vert" 0;
 }
