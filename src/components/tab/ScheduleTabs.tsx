@@ -1,4 +1,3 @@
-import React from 'react';
 import './ScheduleTabs.css'; // 作成したCSSを読み込み
 import { History, Calendar, Sparkles } from "lucide-react";
 
