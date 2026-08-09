@@ -1,9 +1,10 @@
 /* =============================================================
    App.css - メインレイアウト＆ネオン枠スタイリング
    ============================================================= */
-/* index.css または App.css の一番上に追加 */
+
+/* ★ 全体の最背色を真っ黒(#030712)から「深みのある夜空ネイビー(#0a0f24)」にトーンアップ！ */
 html, body {
-  background-color: #030712 !important;
+  background-color: #0a0f24 !important;
   margin: 0;
   padding: 0;
 }
@@ -11,14 +12,15 @@ html, body {
 /* ヘッダー */
 .site-header {
   width: 100%;
-  background-color: rgba(7, 12, 26, 0.8);
+  /* ★ ヘッダー背景も少し明るいネイビーベース＋透け感アップ */
+  background-color: rgba(15, 23, 42, 0.85);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(6, 182, 212, 0.3);
+  border-bottom: 1px solid rgba(6, 182, 212, 0.4);
   position: sticky;
   top: 0;
   z-index: 50;
   padding: 0.75rem 1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 @media (min-width: 640px) {
@@ -30,11 +32,11 @@ html, body {
 
 /* サイトタイトル */
 .site-title {
-  font-family: 'Yomogi', cursive, sans-serif; /* yomogiフォント */
+  font-family: 'Yomogi', cursive, sans-serif;
   font-size: 1.25rem;
   font-weight: 700;
   color: #fef08a;
-  filter: drop-shadow(0 2px 10px rgba(254, 240, 138, 0.5));
+  filter: drop-shadow(0 2px 10px rgba(254, 240, 138, 0.6));
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -73,7 +75,7 @@ html, body {
 .bg-overlay {
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: rgba(10, 15, 36, 0.2); /* ほんのり夜空になじませる */
   backdrop-filter: blur(2px);
   z-index: -10;
 }
@@ -86,13 +88,15 @@ html, body {
   border-radius: 24px;
   padding: 1.3px;
   background: linear-gradient(to top right, #22d3ee, #3b82f6, #6366f1);
-  box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.45);
 }
 
 .neon-inner-calendar {
   width: 100%;
   height: 100%;
-  background-color: #070c1a;
+  /* ★ カレンダー背景をガラス感のある濃紺にして見易さUP！ */
+  background-color: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(12px);
   border-radius: 22.7px;
   overflow: hidden;
 }
@@ -104,18 +108,20 @@ html, body {
   border-radius: 16px;
   padding: 1px;
   background: linear-gradient(to top right, rgba(34, 211, 238, 0.8), rgba(59, 130, 246, 0.8), rgba(99, 102, 241, 0.8));
-  box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
-  transition: box-shadow 0.2s ease-in-out;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease;
 }
 
 .neon-wrapper-card:hover {
-  box-shadow: 0 0 22px rgba(56, 189, 248, 0.45);
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.5);
 }
 
 .neon-inner-card {
   width: 100%;
   height: 100%;
-  background-color: #070c1a;
+  /* ★ カード背景を黒(#070c1a)から、少し明るめのすりガラス風紺(#0f172a)に変更 */
+  background-color: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
   border-radius: 15px;
   overflow: hidden;
 }
@@ -123,14 +129,14 @@ html, body {
 /* 予定なしエリア */
 .empty-schedule-box {
   border-radius: 0.75rem;
-  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border: 1px dashed rgba(255, 255, 255, 0.25);
   padding: 1.5rem;
   text-align: center;
-  color: #cbd5e1;
+  color: #e2e8f0; /* 文字色も少しクッキリ */
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  background-color: rgba(7, 12, 26, 0.85);
+  background-color: rgba(15, 23, 42, 0.8);
   backdrop-filter: blur(12px);
 }

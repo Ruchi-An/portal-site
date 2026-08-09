@@ -36,7 +36,8 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#030712] bg-[url('/star-bg.png')] bg-cover bg-center bg-fixed text-white flex flex-col relative">
+    /* 変更後（ネイビーブルー系にトーンアップ！） */
+    <div className="min-h-screen bg-[#0a0f24] bg-[url('/star-bg.png')] bg-cover bg-center bg-fixed text-white flex flex-col relative">
       
       {/* ヘッダー */}
       <header className="site-header">

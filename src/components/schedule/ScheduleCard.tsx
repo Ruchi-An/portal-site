@@ -1,7 +1,11 @@
 import { useState } from "react";
 import type { Schedule } from "../../types/schedule";
 import "./ScheduleCard.css";
-import { CalendarDays, Clock, Theater, Link as LinkIcon, Radio, Bird, X } from "lucide-react";
+// ★ アイコンを追加インポート
+import { 
+  CalendarDays, Clock, Theater, Link as LinkIcon, Radio, Bird, X,
+  Sunrise, Sun, Moon, MoonStar, Sparkles 
+} from "lucide-react";
 import WatermarkedImage from "../WatermarkedImage";
 
 // カテゴリ用スタイルマッピング
@@ -32,6 +36,15 @@ type Props = {
   schedule: Schedule;
 };
 
+// ★ 時間帯ごとのアイコンとCSS設定マッピング
+const TIME_CONFIG: Record<string, { label: string; icon: React.ElementType; className: string }> = {
+  all_day: { label: "終日", icon: Sparkles, className: "time-tag-all-day" },
+  morning: { label: "朝", icon: Sunrise, className: "time-tag-morning" },
+  afternoon: { label: "昼", icon: Sun, className: "time-tag-afternoon" },
+  night: { label: "夜", icon: Moon, className: "time-tag-night" },
+  late_night: { label: "深夜", icon: MoonStar, className: "time-tag-late-night" },
+};
+
 export default function ScheduleCard({ schedule }: Props) {
   const [isImageOpen, setIsImageOpen] = useState(false);
   const isReal = schedule.category === "リアル";
@@ -56,9 +69,22 @@ export default function ScheduleCard({ schedule }: Props) {
     }
   };
 
+// ★ 時間帯タグ（activeなものだけ抽出して設定を結合）
+  const timeTags = [
+    { key: "all_day", active: schedule.is_all_day },
+    { key: "morning", active: schedule.is_morning },
+    { key: "afternoon", active: schedule.is_afternoon },
+    { key: "night", active: schedule.is_night },
+    { key: "late_night", active: schedule.is_late_night },
+  ]
+    .filter((tag) => tag.active)
+    .map((tag) => ({
+      key: tag.key,
+      ...TIME_CONFIG[tag.key],
+    }));
+
   return (
     <>
-      {/* ★ 不要な border, bg, backdrop-blur, hover を削除してすっきり整理！ */}
       <article className="schedule-card flex gap-3 p-3 sm:p-4 items-center">
         {/* サムネイルエリア */}
         {!isReal && (
@@ -104,6 +130,20 @@ export default function ScheduleCard({ schedule }: Props) {
                 {genre}
               </span>
             )}
+
+{/* ★ 時間帯（朝・昼・夜・深夜・終日）タグを表示 */}
+{timeTags.map((tag) => {
+          const IconComponent = tag.icon;
+          return (
+            <span
+              key={tag.key}
+              className={`time-tag-base ${tag.className} rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-medium flex items-center gap-1.5 truncate`}
+            >
+              <IconComponent size={13} className="shrink-0" />
+              <span>{tag.label}</span>
+            </span>
+          );
+        })}
           </div>
 
           {/* タイトル */}
@@ -119,7 +159,8 @@ export default function ScheduleCard({ schedule }: Props) {
                 <span>{schedule.date}</span>
               </div>
 
-              {schedule.time && (
+              {/* ★ リアル予定ではなく、かつ時間が存在するときだけ時間（Clock）を表示 */}
+              {!isReal && schedule.time && (
                 <div className="flex items-center gap-1 ml-1 sm:ml-2">
                   <Clock size={14} className="text-cyan-300/70 shrink-0" />
                   <span>{schedule.time}</span>
