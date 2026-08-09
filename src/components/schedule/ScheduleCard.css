@@ -6,10 +6,20 @@
     gap: 1.25rem;
     padding: 1rem;
     width: 100%;
-    /* 外側のネオン枠に任せるため、背景・ボーダー・シャドウは透明化 */
-    background: transparent;
-    border: none;
-    box-shadow: none;
+    
+    /* ★ 背景を完全に透明にして、親要素（ガラス感）を透けさせる！ */
+    background: transparent !important; 
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* ★ もしカード内の左側（画像枠・鳥マークのエリア）の暗さが気になる場合はここも調整 */
+.schedule-card .bg-slate-800\/50,
+.schedule-card .bg-slate-900\/50,
+.schedule-card > div:first-child {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(8px);
 }
 
 /* ==========================================================================

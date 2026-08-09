@@ -1,14 +1,15 @@
 /* ==========================================================================
-   1. カレンダー全体・コンテナ（綺麗なすりガラス感）
+   1. カレンダー全体・コンテナ（夜空になじむ明るめクリアブルー）
    ========================================================================== */
 .schedule-calendar {
     padding: 1.5rem;
     border-radius: 24px;
-    background: rgba(15, 23, 42, 0.4) !important; /* カードとおそろいの濃いめ透け感 */
+    /* ★ 全体背景を暗いスレートから明るめのネイビーブルー（透過）にトーンアップ！ */
+    background: rgba(23, 37, 84, 0.6) !important; 
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(6, 182, 212, 0.2) !important; /* ほんのり光る青系の枠線 */
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(56, 189, 248, 0.35) !important; /* 鮮やかな水色枠線 */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.05);
 }
 
 .schedule-calendar .react-calendar {
@@ -33,15 +34,15 @@
     flex-grow: 0 !important;
     min-width: 160px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, .08);
-    border: 1px solid rgba(255, 255, 255, .15);
+    background: rgba(255, 255, 255, .15); /* 白みを増やして見やすく */
+    border: 1px solid rgba(255, 255, 255, .25);
     backdrop-filter: blur(10px);
 }
 
 /* 矢印 */
 .schedule-calendar .react-calendar__navigation button {
     color: white;
-    background: rgba(255, 255, 255, .08);
+    background: rgba(255, 255, 255, .15);
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -50,7 +51,7 @@
 }
 
 .schedule-calendar .react-calendar__navigation button:hover {
-    background: rgba(255, 255, 255, .18);
+    background: rgba(255, 255, 255, .25);
     transform: translateY(-2px);
 }
 
@@ -75,7 +76,7 @@
 .calendar-nav-btn {
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.85); /* 明るめに変更 */
     font-size: 1.5rem;
     cursor: pointer;
     transition: all 0.25s ease;
@@ -88,7 +89,7 @@
 .calendar-nav-btn:hover {
     color: #ffed91;
     transform: scale(1.3);
-    text-shadow: 0 0 8px rgba(255, 237, 145, 0.6);
+    text-shadow: 0 0 8px rgba(255, 237, 145, 0.8);
 }
 
 /* セルと統一した質感（プルダウン・今日ボタン） */
@@ -98,8 +99,9 @@
     height: 2.4rem;
     padding: 0 1rem;
     border-radius: 0.85rem;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    /* ★ 白みを増やして黒つぶれを回避 */
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     color: #ffffff;
     font-size: 0.9rem;
     font-weight: 500;
@@ -110,29 +112,29 @@
 
 /* プルダウンの選択肢 */
 .calendar-header select option {
-    background-color: #0f172a;
+    background-color: #1e293b; /* ドロップダウン背景も少し明るめに */
     color: #ffffff;
 }
 
 /* 今日ボタン */
 .calendar-today-button {
     white-space: nowrap;
-    background-color: rgba(196, 168, 255, 0.15);
-    border-color: rgba(196, 168, 255, 0.3);
-    color: #e2d5ff;
+    background-color: rgba(196, 168, 255, 0.25);
+    border-color: rgba(196, 168, 255, 0.5);
+    color: #f3e8ff;
     font-weight: 600;
 }
 
 .calendar-header select:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
 }
 
 .calendar-today-button:hover {
-    background-color: rgba(196, 168, 255, 0.25);
-    border-color: rgba(196, 168, 255, 0.5);
-    box-shadow: 0 0 12px rgba(196, 168, 255, 0.2);
+    background-color: rgba(196, 168, 255, 0.35);
+    border-color: rgba(196, 168, 255, 0.7);
+    box-shadow: 0 0 12px rgba(196, 168, 255, 0.4);
     color: #ffffff;
 }
 
@@ -140,27 +142,28 @@
    3. 曜日エリア
    ========================================================================== */
 .schedule-calendar .react-calendar__month-view__weekdays {
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.9);
     text-align: center;
     margin-bottom: 0.5rem;
+    font-weight: 600;
 }
 
 .schedule-calendar .react-calendar__month-view__weekdays__weekday abbr {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     display: block;
 }
 
 .schedule-calendar .react-calendar__month-view__weekdays__weekday:nth-child(6) abbr {
-    color: #99daff;
+    color: #a5f3fc; /* より明るいシアン */
 }
 
 .schedule-calendar .react-calendar__month-view__weekdays__weekday:nth-child(7) abbr {
-    color: #ffb1d3;
+    color: #fbcfe8; /* より明るいピンク */
 }
 
 /* ==========================================================================
-   4. 日付グリッド & セル（基本バブルデザイン）
+   4. 日付グリッド & セル（ぷっくりガラスバブル）
    ========================================================================== */
 .schedule-calendar .react-calendar__month-view__days {
     display: grid;
@@ -178,22 +181,25 @@
 .schedule-calendar .react-calendar__tile abbr {
     position: relative;
     z-index: 2;
+    font-weight: 600;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); /* 文字の視認性をキープ */
 }
 
-/* ★ 通常日（予定なし）：うっすら透けるカプセルバブル */
+/* ★ 通常日（予定なし）：ぷっくり明るいすりガラスバブル */
 .schedule-calendar .react-calendar__tile::before {
     content: "";
     position: absolute;
     inset: 4px;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.06); /* 白浮きしない控えめな透け感 */
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    /* ★ 黒さをなくし、白み＆青みのあるクリアなバブルへ！ */
+    background: rgba(255, 255, 255, 0.14); 
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.3);
     transition: all 0.2s ease;
 }
 
-/* ★ 泡の光沢ハイライト（控えめにして透け感を補強） */
+/* ★ 泡のハイライト（光沢感をくっきり見せる） */
 .schedule-calendar .react-calendar__tile::after {
     content: "";
     position: absolute;
@@ -202,8 +208,8 @@
     width: 16px;
     height: 8px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    filter: blur(1.5px);
+    background: rgba(255, 255, 255, 0.45); /* 光沢をくっきり！ */
+    filter: blur(1px);
     pointer-events: none;
     transition: all 0.2s ease;
 }
@@ -211,52 +217,53 @@
 /* ホバー演出 */
 .schedule-calendar .react-calendar__tile:hover::before {
     transform: translateY(-2px);
-    background: rgba(56, 189, 248, 0.15); /* ネオンブルーにうっすら光る */
-    border-color: rgba(56, 189, 248, 0.4);
-    box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+    background: rgba(56, 189, 248, 0.3); /* より鮮やかに光る */
+    border-color: rgba(56, 189, 248, 0.7);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
 }
 
 /* ==========================================================================
    5. 状態別（予定あり / 今日 / 選択中）
    ========================================================================== */
 
-/* ★ 予定あり：ダークブルー系で透け感キープ */
+/* ★ 予定あり：暗いネイビーを廃止して、ほんのり青く光るバブルへ！ */
 .schedule-calendar .react-calendar__tile.has-schedule::before {
-    background: rgba(15, 23, 42, 0.4) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: rgba(30, 58, 138, 0.4) !important; /* ディープブルー＋透明感 */
+    border: 1px solid rgba(125, 211, 252, 0.4) !important; /* 水色の優しい枠線 */
 }
 
-/* 【今日】：紫イメージカラーでふんわり発光 */
+/* 【今日】：紫イメージカラーでふんわり明るく発光 */
 .schedule-calendar .react-calendar__tile.is-today::before {
-    background: rgba(196, 168, 255, 0.15) !important;
-    border: 1.5px solid #C4A8FF !important;
+    background: rgba(196, 168, 255, 0.25) !important;
+    border: 1.5px solid #d8b4fe !important;
+    box-shadow: 0 0 12px rgba(196, 168, 255, 0.3) !important;
 }
 
-/* 【選択中の日】：イエローでくっきりハイライト */
+/* 【選択中の日】：イエローで明るくくっきりハイライト */
 .schedule-calendar .react-calendar__tile.is-selected::before {
-    background: rgba(253, 255, 119, 0.15) !important;
-    border: 1.5px solid #fdff77 !important;
-    box-shadow: 0 0 15px rgba(253, 255, 119, 0.3) !important;
+    background: rgba(254, 240, 138, 0.25) !important;
+    border: 2px solid #fef08a !important;
+    box-shadow: 0 0 18px rgba(254, 240, 138, 0.6) !important;
 }
 
 .schedule-calendar .react-calendar__tile.is-selected abbr {
     color: #ffffff !important;
     font-weight: bold;
-    text-shadow: 0 0 8px rgba(253, 255, 119, 0.8);
+    text-shadow: 0 0 8px rgba(254, 240, 138, 0.9);
 }
 
 /* 日付テキストの色（土・日・祝） */
 .calendar-saturday abbr {
-    color: #99daff;
+    color: #a5f3fc;
 }
 
 .calendar-sunday abbr,
 .calendar-holiday abbr {
-    color: #ffb1d3;
+    color: #fbcfe8;
 }
 
 .calendar-holiday::before {
-    border-color: rgba(255, 214, 232, 0.3) !important;
+    border-color: rgba(251, 207, 232, 0.5) !important;
 }
 
 /* ==========================================================================
@@ -274,15 +281,15 @@
 }
 
 .calendar-star-game {
-    color: #C4A8FF;
+    color: #d8b4fe;
 }
 
 .calendar-star-scenario {
-    color: #fdff77;
+    color: #fef08a;
 }
 
 .calendar-star-real {
-    color: #BFEFFF;
+    color: #bae6fd;
 }
 
 /* ==========================================================================
