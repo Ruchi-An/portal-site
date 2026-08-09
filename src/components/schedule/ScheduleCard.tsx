@@ -1,7 +1,6 @@
 import { useState } from "react";
 import type { Schedule } from "../../types/schedule";
 import "./ScheduleCard.css";
-// ★ アイコンを追加インポート
 import { 
   CalendarDays, Clock, Theater, Link as LinkIcon, Radio, Bird, X,
   Sunrise, Sun, Moon, MoonStar, Sparkles 
@@ -32,17 +31,17 @@ function getGenreStyle(genre?: string) {
   return GENRE_STYLES[genre] ?? "schedule-genre-default";
 }
 
-type Props = {
-  schedule: Schedule;
-};
-
-// ★ 時間帯ごとのアイコンとCSS設定マッピング
+// 時間帯ごとのアイコンとCSS設定マッピング
 const TIME_CONFIG: Record<string, { label: string; icon: React.ElementType; className: string }> = {
   all_day: { label: "終日", icon: Sparkles, className: "time-tag-all-day" },
   morning: { label: "朝", icon: Sunrise, className: "time-tag-morning" },
   afternoon: { label: "昼", icon: Sun, className: "time-tag-afternoon" },
   night: { label: "夜", icon: Moon, className: "time-tag-night" },
   late_night: { label: "深夜", icon: MoonStar, className: "time-tag-late-night" },
+};
+
+type Props = {
+  schedule: Schedule;
 };
 
 export default function ScheduleCard({ schedule }: Props) {
@@ -69,7 +68,7 @@ export default function ScheduleCard({ schedule }: Props) {
     }
   };
 
-// ★ 時間帯タグ（activeなものだけ抽出して設定を結合）
+  // 時間帯タグ抽出
   const timeTags = [
     { key: "all_day", active: schedule.is_all_day },
     { key: "morning", active: schedule.is_morning },
@@ -85,36 +84,32 @@ export default function ScheduleCard({ schedule }: Props) {
 
   return (
     <>
-      <article className="schedule-card flex gap-3 p-3 sm:p-4 items-center">
+      <article className="schedule-card">
         {/* サムネイルエリア */}
         {!isReal && (
-          <div className="w-28 sm:w-48 shrink-0 self-center flex items-center justify-center">
+          <div className="schedule-card-thumbnail-wrapper">
             {schedule.thumbnail_url ? (
               <WatermarkedImage
                 src={schedule.thumbnail_url}
                 alt={schedule.title ?? schedule.label ?? "schedule thumbnail"}
                 onClick={() => setIsImageOpen(true)}
-                className="aspect-video w-full rounded-xl object-cover cursor-pointer transition-transform hover:scale-105 active:scale-95 shadow-md"
+                className="schedule-card-thumbnail"
               />
             ) : (
-              <div className="aspect-video w-full rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400">
-                <Bird size={16} className="text-slate-400" />
+              <div className="schedule-card-thumbnail-placeholder">
+                <Bird size={16} />
               </div>
             )}
           </div>
         )}
 
-        {/* 右：詳細情報 */}
-        <div className="flex-1 flex flex-col justify-center gap-1.5 sm:gap-2.5 min-w-0">
+        {/* 詳細情報 */}
+        <div className="schedule-card-body">
           
           {/* タグエリア */}
-          <div className="font-yomogi flex flex-wrap gap-1.5 max-w-full overflow-hidden">
+          <div className="schedule-card-tags font-yomogi">
             {schedule.category && (
-              <span
-                className={`rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-medium flex items-center gap-1 max-w-full truncate ${getCategoryStyle(
-                  schedule.category
-                )}`}
-              >
+              <span className={`schedule-category-tag ${getCategoryStyle(schedule.category)}`}>
                 <span className="truncate">
                   {schedule.category}<span> ✦ </span>{schedule.title}
                 </span>
@@ -122,55 +117,47 @@ export default function ScheduleCard({ schedule }: Props) {
             )}
 
             {genre && (
-              <span
-                className={`rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-medium truncate ${getGenreStyle(
-                  genre
-                )}`}
-              >
+              <span className={`schedule-genre-tag ${getGenreStyle(genre)}`}>
                 {genre}
               </span>
             )}
 
-{/* ★ 時間帯（朝・昼・夜・深夜・終日）タグを表示 */}
-{timeTags.map((tag) => {
-          const IconComponent = tag.icon;
-          return (
-            <span
-              key={tag.key}
-              className={`time-tag-base ${tag.className} rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-medium flex items-center gap-1.5 truncate`}
-            >
-              <IconComponent size={13} className="shrink-0" />
-              <span>{tag.label}</span>
-            </span>
-          );
-        })}
+            {/* 時間帯タグ */}
+            {timeTags.map((tag) => {
+              const IconComponent = tag.icon;
+              return (
+                <span key={tag.key} className={`time-tag-base ${tag.className}`}>
+                  <IconComponent size={13} className="time-tag-icon" />
+                  <span>{tag.label}</span>
+                </span>
+              );
+            })}
           </div>
 
           {/* タイトル */}
-          <h2 className="font-pop text-base sm:text-lg font-bold text-white line-clamp-1 drop-shadow-sm">
+          <h2 className="schedule-card-title font-pop">
             {schedule.label ?? schedule.title}
           </h2>
 
           {/* メタ情報 */}
-          <div className="font-yomogi space-y-1 text-xs sm:text-sm text-slate-300">
-            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-              <div className="flex items-center gap-1">
-                <CalendarDays size={14} className="text-cyan-300/70 shrink-0" />
+          <div className="schedule-card-meta font-yomogi">
+            <div className="schedule-card-meta-row">
+              <div className="schedule-card-meta-item">
+                <CalendarDays size={14} className="schedule-card-icon" />
                 <span>{schedule.date}</span>
               </div>
 
-              {/* ★ リアル予定ではなく、かつ時間が存在するときだけ時間（Clock）を表示 */}
               {!isReal && schedule.time && (
-                <div className="flex items-center gap-1 ml-1 sm:ml-2">
-                  <Clock size={14} className="text-cyan-300/70 shrink-0" />
+                <div className="schedule-card-meta-item">
+                  <Clock size={14} className="schedule-card-icon" />
                   <span>{schedule.time}</span>
                 </div>
               )}
             </div>
 
             {schedule.category === "シナリオ" && schedule.role && (
-              <div className="flex items-center gap-1">
-                <Theater size={14} className="text-cyan-300/70 shrink-0" />
+              <div className="schedule-card-meta-item">
+                <Theater size={14} className="schedule-card-icon" />
                 <span className="truncate">{schedule.role}</span>
               </div>
             )}
@@ -178,19 +165,19 @@ export default function ScheduleCard({ schedule }: Props) {
 
           {/* リンクボタン群 */}
           {!isReal && (
-            <div className="font-yomogi mt-1 flex gap-2 sm:gap-3">
+            <div className="schedule-card-actions font-yomogi">
               {officialUrl ? (
                 <a
                   href={officialUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="schedule-btn schedule-btn-official whitespace-nowrap shrink-0 text-xs sm:text-sm px-2.5 py-1 sm:px-3"
+                  className="schedule-btn schedule-btn-official"
                 >
                   <LinkIcon size={14} />
                   公式
                 </a>
               ) : (
-                <span className="schedule-btn schedule-btn-disabled whitespace-nowrap shrink-0 text-xs sm:text-sm px-2.5 py-1 sm:px-3">
+                <span className="schedule-btn schedule-btn-disabled">
                   <LinkIcon size={14} />
                   公式
                 </span>
@@ -202,13 +189,13 @@ export default function ScheduleCard({ schedule }: Props) {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={handleStreamClick}
-                  className="schedule-btn schedule-btn-stream whitespace-nowrap shrink-0 text-xs sm:text-sm px-2.5 py-1 sm:px-3"
+                  className="schedule-btn schedule-btn-stream"
                 >
                   <Radio size={14} />
                   配信
                 </a>
               ) : (
-                <span className="schedule-btn schedule-btn-disabled whitespace-nowrap shrink-0 text-xs sm:text-sm px-2.5 py-1 sm:px-3">
+                <span className="schedule-btn schedule-btn-disabled">
                   <Radio size={14} />
                   配信
                 </span>
@@ -221,14 +208,13 @@ export default function ScheduleCard({ schedule }: Props) {
 
       {/* サムネ拡大モーダル */}
       {isImageOpen && schedule.thumbnail_url && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fadeIn"
-          onClick={() => setIsImageOpen(false)}
-        >
-          <div className="relative max-w-4xl max-h-[90vh] flex flex-col items-center">
+        <div className="schedule-modal-overlay" onClick={() => setIsImageOpen(false)}>
+          <div className="schedule-modal-content">
             <button
+              type="button"
               onClick={() => setIsImageOpen(false)}
-              className="absolute -top-10 right-0 text-white/80 hover:text-white transition-colors"
+              className="schedule-modal-close"
+              aria-label="閉じる"
             >
               <X size={28} />
             </button>
@@ -236,7 +222,7 @@ export default function ScheduleCard({ schedule }: Props) {
             <WatermarkedImage
               src={schedule.thumbnail_url}
               alt="拡大表示"
-              className="max-w-full max-h-[85vh] rounded-2xl object-contain shadow-2xl border border-white/20"
+              className="schedule-modal-image"
             />
           </div>
         </div>

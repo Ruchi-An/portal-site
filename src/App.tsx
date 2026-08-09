@@ -1,48 +1,95 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useSchedules } from "./hooks/useSchedules";
 import ScheduleCalendar from "./components/calendar/ScheduleCalendar";
 import ScheduleCard from "./components/schedule/ScheduleCard";
 import { ScheduleTabs } from "./components/tab/ScheduleTabs";
 import { CalendarX, Sparkles } from "lucide-react";
+import type { Schedule } from "./types/schedule";
 import "./App.css";
 
+// -------------------------------------------------------------
+// 【サブコンポーネント】カード用ネオンラッパー
+// -------------------------------------------------------------
+function NeonCard({ schedule }: { schedule: Schedule }) {
+  return (
+    <div className="neon-wrapper-card">
+      <div className="neon-inner-card">
+        <ScheduleCard schedule={schedule} />
+      </div>
+    </div>
+  );
+}
+
+// -------------------------------------------------------------
+// 【サブコンポーネント】スケジュールリスト（共通表示）
+// -------------------------------------------------------------
+function ScheduleList({ 
+  schedules, 
+  emptyMessage 
+}: { 
+  schedules: Schedule[]; 
+  emptyMessage: React.ReactNode; 
+}) {
+  if (schedules.length === 0) {
+    return <div className="empty-schedule-box">{emptyMessage}</div>;
+  }
+
+  return (
+    <div className="schedule-list">
+      {schedules.map((schedule, index) => (
+        <NeonCard 
+          key={schedule.id ?? `${schedule.date}-${index}`} 
+          schedule={schedule} 
+        />
+      ))}
+    </div>
+  );
+}
+
+// -------------------------------------------------------------
+// メインコンポーネント
+// -------------------------------------------------------------
 export default function App() {
   const { schedules = [], loading } = useSchedules();
-
   const [activeTab, setActiveTab] = useState<"past" | "calendar" | "future">("calendar");
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-  const todayStr = new Date().toISOString().split("T")[0];
+  // 日付フィルタリング・ソートの計算ロジック
+  const { selectedDateSchedules, pastSchedules, futureSchedules } = useMemo(() => {
+    const todayStr = new Date().toISOString().split("T")[0];
 
-  const selectedDateSchedules = selectedDate
-    ? schedules.filter((schedule) => schedule.date === selectedDate)
-    : [];
+    const filterRealCategory = (list: Schedule[]) => 
+      list.filter((s) => s.category !== "リアル");
 
-  const pastSchedules = schedules
-    .filter((schedule) => schedule.date < todayStr && schedule.category !== "リアル")
-    .sort((a, b) => (a.date < b.date ? 1 : -1));
-
-  const futureSchedules = schedules
-    .filter((schedule) => schedule.date >= todayStr && schedule.category !== "リアル")
-    .sort((a, b) => (a.date > b.date ? 1 : -1));
+    return {
+      selectedDateSchedules: selectedDate
+        ? schedules.filter((s) => s.date === selectedDate)
+        : [],
+      pastSchedules: filterRealCategory(schedules)
+        .filter((s) => s.date < todayStr)
+        .sort((a, b) => (a.date < b.date ? 1 : -1)),
+      futureSchedules: filterRealCategory(schedules)
+        .filter((s) => s.date >= todayStr)
+        .sort((a, b) => (a.date > b.date ? 1 : -1)),
+    };
+  }, [schedules, selectedDate]);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#030712] text-white flex items-center justify-center font-medium gap-2">
-        <Sparkles className="w-5 h-5 animate-spin text-yellow-200" />
+      <div className="loading-container">
+        <Sparkles className="loading-icon" />
         <span>Loading...</span>
       </div>
     );
   }
 
   return (
-    /* 変更後（ネイビーブルー系にトーンアップ！） */
-    <div className="min-h-screen bg-[#0a0f24] bg-[url('/star-bg.png')] bg-cover bg-center bg-fixed text-white flex flex-col relative">
+    <div className="app-viewport">
       
       {/* ヘッダー */}
       <header className="site-header">
-        <div className="w-full flex items-center justify-between">
-          <h1 className="site-title">
+        <div className="site-header-inner">
+          <h1 className="site-title font-yomogi">
             星降る止まり木 -夕星るちあのポータルサイト-
           </h1>
         </div>
@@ -52,91 +99,60 @@ export default function App() {
       <main className="main-container">
         <div className="bg-overlay" />
 
-        <div className="w-full max-w-4xl flex flex-col items-center">
+        <div className="main-content-wrapper">
           
-          {/* タブ */}
-          <div className="mb-6 w-full flex justify-center">
+          {/* タブ切り替え */}
+          <div className="tab-wrapper">
             <ScheduleTabs activeTab={activeTab} onTabChange={setActiveTab} />
           </div>
 
-          {/* -------------------------------------------------------------
-              【カレンダー タブ】
-             ------------------------------------------------------------- */}
+          {/* カレンダー タブ */}
           {activeTab === "calendar" && (
-            <div className="w-full flex flex-col items-center">
-              
-              {/* カレンダーネオン枠 */}
+            <div className="calendar-tab-content">
               <div className="neon-wrapper-calendar">
                 <div className="neon-inner-calendar">
                   <ScheduleCalendar
                     schedules={schedules}
                     selectedDate={selectedDate}
-                    onSelectDate={(date) => setSelectedDate(date)}
+                    onSelectDate={setSelectedDate}
                   />
                 </div>
               </div>
 
-              {/* 選択した日付の予定カード */}
+              {/* 選択日の予定 */}
               {selectedDate && (
-                <section className="mt-6 w-full space-y-4">
-                  {selectedDateSchedules.length === 0 ? (
-                    <div className="empty-schedule-box">
-                      <CalendarX className="w-8 h-8 opacity-60 stroke-[1.5]" />
-                      <span>この日の予定はありません</span>
-                    </div>
-                  ) : (
-                    selectedDateSchedules.map((schedule, index) => (
-                      <div key={schedule.id ?? `${schedule.date}-${index}`} className="neon-wrapper-card">
-                        <div className="neon-inner-card">
-                          <ScheduleCard schedule={schedule} />
-                        </div>
-                      </div>
-                    ))
-                  )}
+                <section className="selected-date-section">
+                  <ScheduleList
+                    schedules={selectedDateSchedules}
+                    emptyMessage={
+                      <>
+                        <CalendarX className="empty-schedule-icon" />
+                        <span>この日の予定はありません</span>
+                      </>
+                    }
+                  />
                 </section>
               )}
             </div>
           )}
 
-          {/* -------------------------------------------------------------
-              【リスト -過去- タブ】
-             ------------------------------------------------------------- */}
+          {/* リスト -過去- タブ */}
           {activeTab === "past" && (
-            <section className="w-full space-y-4">
-              {pastSchedules.length === 0 ? (
-                <div className="empty-schedule-box">
-                  過去の予定はありません
-                </div>
-              ) : (
-                pastSchedules.map((schedule, index) => (
-                  <div key={schedule.id ?? `${schedule.date}-${index}`} className="neon-wrapper-card">
-                    <div className="neon-inner-card">
-                      <ScheduleCard schedule={schedule} />
-                    </div>
-                  </div>
-                ))
-              )}
+            <section className="tab-section">
+              <ScheduleList
+                schedules={pastSchedules}
+                emptyMessage="過去の予定はありません"
+              />
             </section>
           )}
 
-          {/* -------------------------------------------------------------
-              【リスト -未来- タブ】
-             ------------------------------------------------------------- */}
+          {/* リスト -未来- タブ */}
           {activeTab === "future" && (
-            <section className="w-full space-y-4">
-              {futureSchedules.length === 0 ? (
-                <div className="empty-schedule-box">
-                  これからの予定はありません
-                </div>
-              ) : (
-                futureSchedules.map((schedule, index) => (
-                  <div key={schedule.id ?? `${schedule.date}-${index}`} className="neon-wrapper-card">
-                    <div className="neon-inner-card">
-                      <ScheduleCard schedule={schedule} />
-                    </div>
-                  </div>
-                ))
-              )}
+            <section className="tab-section">
+              <ScheduleList
+                schedules={futureSchedules}
+                emptyMessage="これからの予定はありません"
+              />
             </section>
           )}
 

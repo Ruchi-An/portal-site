@@ -1,44 +1,36 @@
-import './ScheduleTabs.css'; // 作成したCSSを読み込み
+import "./ScheduleTabs.css";
 import { History, Calendar, Sparkles } from "lucide-react";
 
+type TabType = "past" | "calendar" | "future";
+
 type Props = {
-  activeTab: "past" | "calendar" | "future";
-  onTabChange: (tab: "past" | "calendar" | "future") => void;
+  activeTab: TabType;
+  onTabChange: (tab: TabType) => void;
 };
+
+// タブの設定データ
+const TABS = [
+  { id: "past", label: "リスト -過去-", icon: History },
+  { id: "calendar", label: "カレンダー", icon: Calendar },
+  { id: "future", label: "リスト -未来-", icon: Sparkles },
+] as const;
 
 export const ScheduleTabs = ({ activeTab, onTabChange }: Props) => {
   return (
-<div className="font-pop schedule-tabs-container">
-      <div className="schedule-tabs flex items-center justify-center gap-2 sm:gap-6">
-        {/* 過去リスト */}
-        <button
-          className={`tab-btn flex items-center justify-center gap-2 whitespace-nowrap ${activeTab === 'past' ? 'active' : ''}`}
-          onClick={() => onTabChange('past')}
-          title="リスト -過去-"
-        >
-          <History size={18} className="shrink-0" />
-          <span className="hidden sm:inline-block">リスト -過去-</span>
-        </button>
-
-        {/* カレンダー */}
-        <button
-          className={`tab-btn flex items-center justify-center gap-2 whitespace-nowrap ${activeTab === 'calendar' ? 'active' : ''}`}
-          onClick={() => onTabChange('calendar')}
-          title="カレンダー"
-        >
-          <Calendar size={18} className="shrink-0" />
-          <span className="hidden sm:inline-block">カレンダー</span>
-        </button>
-
-        {/* 未来リスト */}
-        <button
-          className={`tab-btn flex items-center justify-center gap-2 whitespace-nowrap ${activeTab === 'future' ? 'active' : ''}`}
-          onClick={() => onTabChange('future')}
-          title="リスト -未来-"
-        >
-          <Sparkles size={18} className="shrink-0" />
-          <span className="hidden sm:inline-block">リスト -未来-</span>
-        </button>
+    <div className="schedule-tabs-container font-pop">
+      <div className="schedule-tabs">
+        {TABS.map(({ id, label, icon: Icon }) => (
+          <button
+            key={id}
+            type="button"
+            className={`tab-btn ${activeTab === id ? "active" : ""}`}
+            onClick={() => onTabChange(id)}
+            title={label}
+          >
+            <Icon size={18} className="tab-icon" />
+            <span className="tab-label">{label}</span>
+          </button>
+        ))}
       </div>
     </div>
   );

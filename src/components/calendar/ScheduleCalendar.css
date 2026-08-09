@@ -1,15 +1,23 @@
 /* ==========================================================================
-   1. カレンダー全体・コンテナ（夜空になじむ明るめクリアブルー）
+   1. カレンダー全体・コンテナ
    ========================================================================== */
 .schedule-calendar {
-    padding: 1.5rem;
-    border-radius: 24px;
-    /* ★ 全体背景を暗いスレートから明るめのネイビーブルー（透過）にトーンアップ！ */
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 1rem;
+    border-radius: 1rem; /* rounded-2xl */
     background: rgba(23, 37, 84, 0.6) !important; 
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(56, 189, 248, 0.35) !important; /* 鮮やかな水色枠線 */
+    border: 1px solid rgba(56, 189, 248, 0.35) !important;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+@media (min-width: 640px) {
+    .schedule-calendar {
+        padding: 1.5rem;
+    }
 }
 
 .schedule-calendar .react-calendar {
@@ -62,21 +70,36 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 0.25rem;
     margin-bottom: 1.25rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.25rem;
+}
+
+@media (min-width: 640px) {
+    .calendar-header {
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
 }
 
 .calendar-header-center {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.25rem;
+}
+
+@media (min-width: 640px) {
+    .calendar-header-center {
+        gap: 0.5rem;
+    }
 }
 
 /* 前月・次月の「✦」ボタン */
 .calendar-nav-btn {
+    flex-shrink: 0;
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.85); /* 明るめに変更 */
+    color: rgba(255, 255, 255, 0.85);
     font-size: 1.5rem;
     cursor: pointer;
     transition: all 0.25s ease;
@@ -99,7 +122,6 @@
     height: 2.4rem;
     padding: 0 1rem;
     border-radius: 0.85rem;
-    /* ★ 白みを増やして黒つぶれを回避 */
     background: rgba(255, 255, 255, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.25);
     color: #ffffff;
@@ -110,14 +132,14 @@
     transition: all 0.2s ease;
 }
 
-/* プルダウンの選択肢 */
 .calendar-header select option {
-    background-color: #1e293b; /* ドロップダウン背景も少し明るめに */
+    background-color: #1e293b;
     color: #ffffff;
 }
 
 /* 今日ボタン */
 .calendar-today-button {
+    flex-shrink: 0;
     white-space: nowrap;
     background-color: rgba(196, 168, 255, 0.25);
     border-color: rgba(196, 168, 255, 0.5);

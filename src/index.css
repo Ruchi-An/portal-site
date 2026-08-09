@@ -28,7 +28,7 @@ body,
 #root {
   margin: 0;
   min-height: 100%;
-  background-color: #030712 !important;
+  background-color: #0a0f24 !important; /* ★ #030712 から夜空ネイビーへ変更 */
 }
 
 html {

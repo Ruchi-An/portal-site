@@ -18,11 +18,11 @@ export default function WatermarkedImage({
   useEffect(() => {
     if (!src) return;
 
+    let isSubscribed = true;
     const img = new Image();
     img.crossOrigin = "anonymous";
 
     img.onload = () => {
-      // 1. Canvasの準備
       const canvas = document.createElement("canvas");
       canvas.width = img.width;
       canvas.height = img.height;
@@ -33,26 +33,24 @@ export default function WatermarkedImage({
       // 元画像を描画
       ctx.drawImage(img, 0, 0);
 
-      // 2. 元画像の「平均の明るさ（輝度）」を計算
+      // 平均輝度の計算
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const data = imageData.data;
       let totalBrightness = 0;
-
       let count = 0;
+
       for (let i = 0; i < data.length; i += 4 * 10) {
         const r = data[i];
         const g = data[i + 1];
         const b = data[i + 2];
-        const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
-        totalBrightness += brightness;
+        totalBrightness += 0.299 * r + 0.587 * g + 0.114 * b;
         count++;
       }
 
       const avgBrightness = totalBrightness / count;
 
-      // 3. 4段階の明るさに応じて素材を自動切り替え
+      // 明るさに応じたウォーターマーク素材の切り替え
       let watermarkPath = "/watermark-lightgray.png";
-
       if (avgBrightness < 65) {
         watermarkPath = "/watermark-white.png";
       } else if (avgBrightness < 125) {
@@ -63,34 +61,31 @@ export default function WatermarkedImage({
         watermarkPath = "/watermark-black.png";
       }
 
-      // 4. ウォーターマークの読み込み＆タイリング（繰り返し）合成
+      // ウォーターマーク画像の合成
       const wm = new Image();
       wm.crossOrigin = "anonymous";
-      
+
       wm.onload = () => {
-        // ★ 濃さ（透明度）を控えめ（0.35）に設定！
-        // 目立ちすぎる場合は 0.25〜0.3 に、薄すぎる場合は 0.45 くらいに調整してね
-        ctx.globalAlpha = 0.35; 
+        if (!isSubscribed) return;
 
-        // ★ 比率を保ったまま敷き詰める計算
-        // サムネイルの横幅に合わせて、ウォーターマーク1個あたりの幅を決める（例: 横幅の約1/3〜1/2）
-        const targetTileWidth = Math.max(canvas.width / 3, 250); 
-        const scale = targetTileWidth / wm.width; 
-        const tileW = wm.width * scale;  // 比率を保った幅
-        const tileH = wm.height * scale; // 比率を保った高さ
+        ctx.globalAlpha = 0.35;
 
-        // 縦横に敷き詰めて描画（タイル配置）
+        const targetTileWidth = Math.max(canvas.width / 3, 250);
+        const scale = targetTileWidth / wm.width;
+        const tileW = wm.width * scale;
+        const tileH = wm.height * scale;
+
         for (let x = 0; x < canvas.width; x += tileW) {
           for (let y = 0; y < canvas.height; y += tileH) {
             ctx.drawImage(wm, x, y, tileW, tileH);
           }
         }
 
-        // 合成完了後、DataURL化
         setWatermarkedDataUrl(canvas.toDataURL("image/png"));
       };
 
       wm.onerror = () => {
+        if (!isSubscribed) return;
         console.error(`ウォーターマーク画像が見つかりません: ${watermarkPath}`);
         setWatermarkedDataUrl(canvas.toDataURL("image/png"));
       };
@@ -99,9 +94,13 @@ export default function WatermarkedImage({
     };
 
     img.src = src;
+
+    return () => {
+      isSubscribed = false;
+    };
   }, [src]);
 
-  // 読み込み中表示
+  // ローディング中表示
   if (!watermarkedDataUrl) {
     return <div className={`animate-pulse bg-white/10 ${className}`} />;
   }

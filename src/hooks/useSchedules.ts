@@ -1,14 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "../lib/supabase";
 import type { Schedule } from "../types/schedule";
 
 export function useSchedules() {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    async function fetchSchedules() {
-      const { data, error } = await supabase
+  const fetchSchedules = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { data, error: supabaseError } = await supabase
         .from("schedules")
         .select(`
           *,
@@ -21,23 +25,31 @@ export function useSchedules() {
             official_url
           )
         `)
-        .order("date", { ascending: true });
+        .order("date", { ascending: true })
+        .returns<Schedule[]>();
 
-      if (error) {
-        console.error(error);
-        return;
+      if (supabaseError) {
+        throw supabaseError;
       }
 
-      console.log(data);
       setSchedules(data ?? []);
+    } catch (err) {
+      console.error("Failed to fetch schedules:", err);
+      setError(err instanceof Error ? err : new Error("データの取得に失敗しました"));
+    } finally {
+      // 成功・失敗にかかわらずローディングを終了
       setLoading(false);
     }
-
-    fetchSchedules();
   }, []);
+
+  useEffect(() => {
+    fetchSchedules();
+  }, [fetchSchedules]);
 
   return {
     schedules,
     loading,
+    error,
+    refetch: fetchSchedules, // 任意で手動リロードできるように提供
   };
 }
