@@ -45,6 +45,7 @@ type Props = {
 };
 
 export default function ScheduleCard({ schedule }: Props) {
+  console.log("scheduleの中身:", schedule);
   const [isImageOpen, setIsImageOpen] = useState(false);
   const isReal = schedule.category === "リアル";
 
@@ -144,13 +145,13 @@ export default function ScheduleCard({ schedule }: Props) {
             <div className="schedule-card-meta-row">
               <div className="schedule-card-meta-item">
                 <CalendarDays size={14} className="schedule-card-icon" />
-                <span>{schedule.date}</span>
+                <span>{schedule.date ?? "-"}</span>
               </div>
 
               {!isReal && schedule.time && (
                 <div className="schedule-card-meta-item">
                   <Clock size={14} className="schedule-card-icon" />
-                  <span>{schedule.time}</span>
+                  <span>{schedule.time ?? "-"}</span>
                 </div>
               )}
             </div>

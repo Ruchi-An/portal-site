@@ -54,26 +54,39 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<"past" | "calendar" | "future">("calendar");
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-  // 日付フィルタリング・ソートの計算ロジック
+// 日付フィルタリング・ソートの計算ロジック
   const { selectedDateSchedules, pastSchedules, futureSchedules } = useMemo(() => {
     const todayStr = new Date().toISOString().split("T")[0];
 
     const filterRealCategory = (list: Schedule[]) => 
       list.filter((s) => s.category !== "リアル");
 
+    const filtered = filterRealCategory(schedules);
+
     return {
       selectedDateSchedules: selectedDate
         ? schedules.filter((s) => s.date === selectedDate)
         : [],
-      pastSchedules: filterRealCategory(schedules)
-        .filter((s) => s.date < todayStr)
-        .sort((a, b) => (a.date < b.date ? 1 : -1)),
-      futureSchedules: filterRealCategory(schedules)
-        .filter((s) => s.date >= todayStr)
-        .sort((a, b) => (a.date > b.date ? 1 : -1)),
+
+      // 1. 過去リスト：日付があって、今日より前のものを降順（新しい順）
+      pastSchedules: filtered
+        .filter((s) => s.date && s.date < todayStr)
+        .sort((a, b) => b.date!.localeCompare(a.date!)),
+
+      // 2. 未来リスト：今日以降の予定 ＋ 日付未定（null/なし）の予定
+      futureSchedules: filtered
+        .filter((s) => !s.date || s.date >= todayStr)
+        .sort((a, b) => {
+          // 日付なし（未定）は一番下に回す
+          if (!a.date && !b.date) return 0;
+          if (!a.date) return 1;
+          if (!b.date) return -1;
+          // 日付があるものは昇順（近い未来が上）
+          return a.date.localeCompare(b.date);
+        }),
     };
   }, [schedules, selectedDate]);
-
+  
   if (loading) {
     return (
       <div className="loading-container">
