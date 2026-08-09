@@ -199,6 +199,27 @@
     background: transparent !important;
     color: white;
     position: relative;
+    /* ★ ブラウザ標準の<button>装飾（枠線・アウトライン・影）を完全リセット */
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.schedule-calendar .react-calendar__tile:focus,
+.schedule-calendar .react-calendar__tile:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* react-calendarが内部で付与するアクティブ/隣接月クラスの余分な枠線対策 */
+.schedule-calendar .react-calendar__tile--active,
+.schedule-calendar .react-calendar__tile--hasActive {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .schedule-calendar .react-calendar__tile abbr {
@@ -218,9 +239,7 @@
     background: rgba(255, 255, 255, 0.14); 
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.3);
     transition: all 0.2s ease;
-    filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.4));
 }
 
 /* ★ 泡のハイライト（光沢感をくっきり見せる） */
