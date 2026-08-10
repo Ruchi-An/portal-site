@@ -321,57 +321,71 @@
   cursor: not-allowed;
 }
 
-/* ==========================================================================
-   4. モーダル拡大表示
-   ========================================================================== */
-.schedule-modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
+/* =============================================================
+   拡大画像モーダル（画面全体）
+   ============================================================= */
+
+/* 画面全体を覆う黒背景（セミトランスペアレント） */
+.image-modal-overlay {
+  position: fixed; /* 👈 ビューポートに対して固定 */
+  inset: 0; /* top, right, bottom, left すべて 0 */
+  background-color: rgba(0, 0, 0, 0.85); /* 暗くする */
+  z-index: 9999; /* 👈 他の要素より必ず前に出す（本棚UIより前） */
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 1rem;
-  animation: fadeIn 0.2s ease-out;
+  padding: 2rem;
+  backdrop-filter: blur(4px); /* 背景を少しぼかすとおしゃれ */
+  cursor: zoom-out; /* クリックで閉じれることを示すカーソル */
 }
 
-.schedule-modal-content {
+/* 画像を表示するコンテンツエリア */
+.image-modal-content {
   position: relative;
-  max-width: 56rem; /* max-w-4xl */
-  max-height: 90vh;
+  max-width: 90%; /* 画面幅の最大90% */
+  max-height: 90vh; /* 画面高さの最大90% */
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  cursor: default; /* ここはクリックしても閉じないようにする */
 }
 
-.schedule-modal-close {
-  position: absolute;
-  top: -2.5rem;
-  right: 0;
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.schedule-modal-close:hover {
-  color: #ffffff;
-}
-
-.schedule-modal-image {
+/* 拡大表示される画像（WatermarkedImage）へのスタイル */
+.image-modal-view {
+  width: auto;
+  height: auto;
   max-width: 100%;
-  max-height: 85vh;
-  border-radius: 1rem;
-  object-fit: contain;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-height: 90vh; /* 縦長画像でも画面からはみ出さないように */
+  object-fit: contain; /* 画像全体を表示 */
+  border-radius: 4px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  display: block;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* 閉じるボタン */
+.image-modal-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  z-index: 10000; /* 画像より前 */
+}
+
+.image-modal-close:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* カード内のサムネイル自体にもカーソルポインターを当てておく */
+.schedule-card-thumbnail {
+  cursor: zoom-in;
 }

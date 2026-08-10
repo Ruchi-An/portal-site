@@ -1,0 +1,96 @@
+/* ==========================================================================
+   シナリオページ内タブ（通過報告 / 通過予定 / GM可能）
+   ========================================================================== */
+.scenario-tabs-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.scenario-tabs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .scenario-tabs {
+    gap: 1.5rem;
+  }
+}
+
+.scenario-tab-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 0.8rem 0.5rem;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  outline: none;
+  text-decoration: none;
+}
+
+.scenario-tab-icon {
+  flex-shrink: 0;
+}
+
+.scenario-tab-label {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .scenario-tab-label {
+    display: inline-block;
+  }
+}
+
+.scenario-tab-btn:hover {
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+.scenario-tab-btn.active {
+  color: #ffffff;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(255, 253, 145, 0.4);
+}
+
+.scenario-tab-btn::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #fdff77, #C4A8FF, #BFEFFF);
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(253, 255, 119, 0.6);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+  opacity: 0;
+}
+
+.scenario-tab-btn.active::after {
+  width: 100%;
+  opacity: 1;
+}
+
+.scenario-tab-btn:not(.active):hover::after {
+  width: 40%;
+  opacity: 0.5;
+}

@@ -1,0 +1,204 @@
+/* =============================================================
+   ReportBookshelf.css - 本棚UI（通過報告一覧）
+   ============================================================= */
+
+:root {
+  /* 列幅を固定することで auto-fill が「わかりやすく」列ごとに折り返す。
+     エンドカードは1080x1920(9:16)想定なので、表紙の高さは
+     book-w から比率で算出している。 */
+  --book-w: 132px;
+  --book-h: 234px; /* ≒ book-w * 16/9 */
+  --shelf-plank-h: 14px;
+  --shelf-row-gap: 3rem;
+}
+
+.bookshelf {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, var(--book-w));
+  justify-content: space-between;
+  column-gap: 1.1rem;
+  row-gap: var(--shelf-row-gap);
+  grid-auto-rows: var(--book-h);
+  align-items: end;
+  padding: 0.5rem 0.25rem 1rem;
+  min-width: 0; /* 親がflex/gridでも縮んで折り返せるようにする */
+
+  /* ------------------------------------------------------------
+     木の棚板を各行の下に自動で敷くトリック。
+     行の高さ(--book-h) + 行間(--shelf-row-gap) を1ユニットとして
+     繰り返し背景に木目カラーのバンドを描画する。
+     行の高さが固定なので、本の冊数が増えても常にズレず揃う。
+     ------------------------------------------------------------ */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--book-h) + (var(--shelf-row-gap) - var(--shelf-plank-h)) / 2),
+    #4a3524 calc(var(--book-h) + (var(--shelf-row-gap) - var(--shelf-plank-h)) / 2),
+    #2e2013 calc(var(--book-h) + (var(--shelf-row-gap) + var(--shelf-plank-h)) / 2),
+    transparent calc(var(--book-h) + (var(--shelf-row-gap) + var(--shelf-plank-h)) / 2),
+    transparent calc(var(--book-h) + var(--shelf-row-gap))
+  );
+  background-size: 100% calc(var(--book-h) + var(--shelf-row-gap));
+  background-position: top center;
+  background-repeat: repeat-y;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --book-w: 150px;
+    --book-h: 220px;
+  }
+
+  .bookshelf {
+    column-gap: 1.4rem;
+  }
+}
+
+/* -------------------------------------------------------------
+   1冊分のカード
+   ------------------------------------------------------------- */
+.book-card {
+  position: relative;
+  display: block;
+  width: var(--book-w);
+  height: var(--book-h);
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transform-origin: bottom center;
+  transition: transform 0.28s ease, filter 0.28s ease;
+}
+
+.book-card:hover,
+.book-card:focus-visible {
+  transform: translateY(-10px) rotate(-1.5deg);
+  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.45));
+}
+
+.book-card:focus-visible {
+  outline: 2px solid #fdff77;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* 表紙（＝本そのもの。エンドカード + タイトル帯を内包） */
+.book-cover {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 3px 8px 8px 3px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1c2a52, #0a0f24);
+  box-shadow:
+    inset 6px 0 0 rgba(0, 0, 0, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 6px 14px rgba(0, 0, 0, 0.5);
+}
+
+.book-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* 👈 cover から contain に変更 */
+  object-position: center; /* 中央寄せ */
+  display: block;
+}
+
+.book-cover-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(254, 240, 138, 0.6);
+}
+
+/* 表紙の光沢演出 */
+.book-cover-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0) 30%
+  );
+  pointer-events: none;
+}
+
+/* 連番バッジ（図書ラベル風・左上） */
+.book-number-badge {
+  position: absolute;
+  top: -0.5rem;
+  left: -0.35rem;
+  z-index: 2;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  padding: 0 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fdff77, #fef08a);
+  color: #1c1204;
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transform: rotate(-8deg);
+}
+
+/* 日付バッジ（右上） */
+.book-date-badge {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  z-index: 2;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  background: rgba(10, 15, 36, 0.65);
+  color: rgba(191, 239, 255, 0.9);
+  font-size: 0.65rem;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* タイトル帯（表紙下部に重なるオビ） */
+.book-title-scrim {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 1.5rem 0.5rem 0.5rem;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.82) 0%,
+    rgba(0, 0, 0, 0.55) 55%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  display: flex;
+  align-items: flex-end;
+}
+
+.book-title-text {
+  width: 100%;
+  font-size: 0.78rem;
+  line-height: 1.3;
+  color: #ffffff;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+@media (min-width: 640px) {
+  .book-title-text {
+    font-size: 0.85rem;
+  }
+}

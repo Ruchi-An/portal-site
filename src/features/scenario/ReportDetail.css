@@ -1,0 +1,252 @@
+/* =============================================================
+   ReportDetail.css - シナリオ通過報告 詳細ページ
+   ============================================================= */
+
+.report-detail {
+  width: 100%;
+  max-width: 42rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.report-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  align-self: flex-start;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.2s ease;
+}
+
+.report-back-link:hover {
+  color: #fdff77;
+}
+
+.report-detail-card {
+  width: 100%;
+}
+
+/* 縦並びに固定 */
+.report-detail-inner {
+  display: flex;
+  flex-direction: column; 
+  padding: 0;
+  overflow: hidden; /* 角丸からはみ出ないように */
+}
+
+/* サムネイルエリア */
+.report-detail-cover-wrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  flex-shrink: 0;
+}
+
+.report-detail-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.report-detail-cover-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1c2a52, #0a0f24);
+  color: rgba(254, 240, 138, 0.6);
+}
+
+/* 本文エリア */
+.report-detail-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem 1.4rem 1.5rem;
+  min-width: 0;
+}
+
+.report-detail-genre {
+  align-self: flex-start;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(196, 168, 255, 0.18);
+  color: #C4A8FF;
+  border: 1px solid rgba(196, 168, 255, 0.4);
+}
+
+.report-detail-title {
+  font-size: 1.35rem;
+  color: #fef08a;
+  line-height: 1.35;
+  filter: drop-shadow(0 2px 8px rgba(254, 240, 138, 0.35));
+}
+
+.report-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.report-detail-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.report-detail-credit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.report-detail-credit-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.report-detail-credit-item a {
+  color: #bfefff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.report-detail-synopsis {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: pre-wrap;
+  margin-top: 0.2rem;
+}
+
+/* リンクボタン群（公式・配信） */
+.report-detail-links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.report-detail-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-family: 'Yomogi', cursive, sans-serif;
+  text-decoration: none;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+/* 公式ボタン（黄色×水色グラデ） */
+.official-btn {
+  color: #0a0f24;
+  background: linear-gradient(120deg, #fdff77, #bfefff);
+  box-shadow: 0 0 12px rgba(253, 255, 119, 0.35);
+}
+
+.official-btn:hover {
+  box-shadow: 0 0 18px rgba(253, 255, 119, 0.55);
+  transform: translateY(-1px);
+}
+
+/* 配信ボタン（ピンク×赤系ネオン） */
+.stream-btn {
+  color: #ffffff;
+  background: linear-gradient(120deg, #ff758c, #ff7eb3);
+  box-shadow: 0 0 12px rgba(255, 117, 140, 0.35);
+}
+
+.stream-btn:hover {
+  box-shadow: 0 0 18px rgba(255, 117, 140, 0.55);
+  transform: translateY(-1px);
+}
+
+
+/* -------------------------------------------------------------
+   参加メンバー セクション（シンプルテーブル）
+   ------------------------------------------------------------- */
+.report-cast-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  width: 100%;
+}
+
+.report-cast-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.05rem;
+  color: #ffffff;
+}
+
+.report-cast-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  background-color: rgba(15, 32, 77, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.report-cast-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.report-cast-table th {
+  background: rgba(10, 15, 36, 0.8);
+  color: #bfefff;
+  padding: 0.75rem 1.2rem;
+  font-weight: normal;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
+}
+
+.report-cast-table td {
+  padding: 0.75rem 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: middle;
+}
+
+.report-cast-table tr:last-child td {
+  border-bottom: none;
+}
+
+.report-cast-table tr:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* 参加者列 */
+.cast-col-user {
+  font-weight: bold;
+  color: #ffffff;
+  min-width: 120px;
+}
+
+/* 役割列 */
+.cast-col-role {
+  color: #ffffff;
+  width: 80px;
+}
+
+/* 担当キャラクター列 */
+.cast-col-char {
+  color: #ffffff; 
+}

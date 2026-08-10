@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom"; // 👈 ① これを追加！
 import type { Schedule } from "../../types/schedule";
 import "./ScheduleCard.css";
 import { 
@@ -85,7 +86,7 @@ export default function ScheduleCard({ schedule }: Props) {
 
   return (
     <>
-      <article className="schedule-card">
+      <div className="schedule-card">
         {/* サムネイルエリア */}
         {!isReal && (
           <div className="schedule-card-thumbnail-wrapper">
@@ -93,7 +94,7 @@ export default function ScheduleCard({ schedule }: Props) {
               <WatermarkedImage
                 src={schedule.thumbnail_url}
                 alt={schedule.title ?? schedule.label ?? "schedule thumbnail"}
-                onClick={() => setIsImageOpen(true)}
+                onClick={() => setIsImageOpen(true)} 
                 className="schedule-card-thumbnail"
               />
             ) : (
@@ -103,7 +104,6 @@ export default function ScheduleCard({ schedule }: Props) {
             )}
           </div>
         )}
-
         {/* 詳細情報 */}
         <div className="schedule-card-body">
           
@@ -205,28 +205,25 @@ export default function ScheduleCard({ schedule }: Props) {
           )}
 
         </div>
-      </article>
+      </div>
 
-      {/* サムネ拡大モーダル */}
-      {isImageOpen && schedule.thumbnail_url && (
-        <div className="schedule-modal-overlay" onClick={() => setIsImageOpen(false)}>
-          <div className="schedule-modal-content">
-            <button
-              type="button"
-              onClick={() => setIsImageOpen(false)}
-              className="schedule-modal-close"
-              aria-label="閉じる"
-            >
-              <X size={28} />
-            </button>
-            
+      {/* 👈 ② モーダル部分を createPortal で body 直下に吹き飛ばす！ */}
+      {isImageOpen && schedule.thumbnail_url && createPortal(
+        <div className="image-modal-overlay" onClick={() => setIsImageOpen(false)}>
+          {/* 閉じるボタン */}
+          <button className="image-modal-close" onClick={() => setIsImageOpen(false)}>
+            <X size={24} />
+          </button>
+          
+          <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
             <WatermarkedImage
               src={schedule.thumbnail_url}
-              alt="拡大表示"
-              className="schedule-modal-image"
+              alt="拡大サムネイル"
+              className="image-modal-view"
             />
           </div>
-        </div>
+        </div>,
+        document.body // 👈 第2引数に document.body を指定
       )}
     </>
   );
