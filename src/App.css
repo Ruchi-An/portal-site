@@ -24,9 +24,16 @@ html, body {
   position: relative;
 }
 
-/* ローディング画面 */
+/* ローディング画面（画面全体を覆うように変更） */
 .loading-container {
-  min-height: 100vh;
+  /* 画面全体に固定 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999; /* 他の要素より一番上に表示 */
+
   background-color: #0a0f24;
   color: #ffffff;
   display: flex;

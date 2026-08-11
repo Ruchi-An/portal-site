@@ -15,7 +15,7 @@ export default function Header() {
     <header className="site-header">
       <div className="site-header-inner">
         <h1 className="site-title font-yomogi">
-          星降る止まり木 -夕星るちあのポータルサイト-
+          星降る止まり木
         </h1>
 
         <nav className="site-nav font-pop" aria-label="ページ切り替え">

@@ -1,4 +1,5 @@
-import React, { useMemo } from "react";
+import React, { useState, useMemo } from "react"; // 👈 useState を追加
+import { createPortal } from "react-dom"; // 👈 createPortal を追加
 import { useParams, Link } from "react-router-dom";
 import {
   Sparkles,
@@ -9,13 +10,18 @@ import {
   Link as LinkIcon,
   Radio,
   Users,
+  X, // 👈 X アイコンを追加
 } from "lucide-react";
 import { useScenarioReportDetail } from "./useScenarioReportDetail";
+import WatermarkedImage from "../../WatermarkedImage"; // 👈 もしウォーターマーク表示が必要ならインポート（不要なら通常の img や既存コンポーネントに合わせてね）
 import "./ReportDetail.css";
 
 export default function ReportDetail() {
   const { scheduleId } = useParams<{ scheduleId: string }>();
   const { detail, loading, error } = useScenarioReportDetail(scheduleId);
+
+  // 💡 画像モーダルの開閉状態
+  const [isImageOpen, setIsImageOpen] = useState(false);
 
   // 💡 キャストの並び替え（GM/STを先頭、PLは番号順）
   const sortedCast = useMemo(() => {
@@ -104,10 +110,11 @@ export default function ReportDetail() {
           {/* ① サムネイル（表紙エリア） */}
           <div className="report-detail-cover-wrapper">
             {detail.endcardUrl ? (
-              <img
+              <WatermarkedImage
                 src={detail.endcardUrl}
                 alt={scenario?.title ?? ""}
-                className="report-detail-cover"
+                className="report-detail-cover clickable" // 👈 クリック可能とわかるようにカーソルポインター等のCSSを当てるため 'clickable' 等をつけると親切！
+                onClick={() => setIsImageOpen(true)} // 👈 クリックでモーダルを開く
               />
             ) : (
               <div className="report-detail-cover report-detail-cover-fallback">
@@ -133,6 +140,7 @@ export default function ReportDetail() {
             <div className="report-detail-meta font-yomogi">
               <span className="report-detail-meta-item">
                 <CalendarDays size={15} />
+                通過日：
                 {detail.date}
               </span>
             </div>
@@ -143,7 +151,7 @@ export default function ReportDetail() {
                 {scenario?.production && (
                   <span className="report-detail-credit-item">
                     <Building2 size={14} />
-                    制作：
+                    制作 ：
                     {scenario.productionUrl ? (
                       <a href={scenario.productionUrl} target="_blank" rel="noopener noreferrer">
                         {scenario.production}
@@ -247,6 +255,25 @@ export default function ReportDetail() {
           </div>
         )}
       </section>
+
+      {/* 💡 エンドカード拡大用モーダル */}
+      {isImageOpen && detail.endcardUrl && createPortal(
+        <div className="image-modal-overlay" onClick={() => setIsImageOpen(false)}>
+          {/* 閉じるボタン */}
+          <button className="image-modal-close" onClick={() => setIsImageOpen(false)}>
+            <X size={24} />
+          </button>
+          
+          <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
+            <WatermarkedImage
+              src={detail.endcardUrl}
+              alt="拡大エンドカード"
+              className="image-modal-view"
+            />
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

@@ -3,33 +3,25 @@
    ============================================================= */
 
 :root {
-  /* 列幅を固定することで auto-fill が「わかりやすく」列ごとに折り返す。
-     エンドカードは1080x1920(9:16)想定なので、表紙の高さは
-     book-w から比率で算出している。 */
-  --book-w: 132px;
-  --book-h: 234px; /* ≒ book-w * 16/9 */
-  --shelf-plank-h: 14px;
-  --shelf-row-gap: 3rem;
+  /* スマホ向け（3列表示）の基本サイズ */
+  --book-w: 100%;
+  --book-h: 190px;
+  --shelf-plank-h: 12px;
+  --shelf-row-gap: 2.2rem;
 }
 
 .bookshelf {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, var(--book-w));
-  justify-content: space-between;
-  column-gap: 1.1rem;
+  /* スマホではきっちり3列にする */
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 0.5rem;
   row-gap: var(--shelf-row-gap);
   grid-auto-rows: var(--book-h);
   align-items: end;
   padding: 0.5rem 0.25rem 1rem;
-  min-width: 0; /* 親がflex/gridでも縮んで折り返せるようにする */
+  min-width: 0;
 
-  /* ------------------------------------------------------------
-     木の棚板を各行の下に自動で敷くトリック。
-     行の高さ(--book-h) + 行間(--shelf-row-gap) を1ユニットとして
-     繰り返し背景に木目カラーのバンドを描画する。
-     行の高さが固定なので、本の冊数が増えても常にズレず揃う。
-     ------------------------------------------------------------ */
   background-image: repeating-linear-gradient(
     to bottom,
     transparent 0,
@@ -44,13 +36,17 @@
   background-repeat: repeat-y;
 }
 
+/* PC・タブレット向け（640px以上）のサイズ切り替え */
 @media (min-width: 640px) {
   :root {
     --book-w: 150px;
     --book-h: 220px;
+    --shelf-plank-h: 14px;
+    --shelf-row-gap: 3rem;
   }
-
   .bookshelf {
+    grid-template-columns: repeat(auto-fill, var(--book-w));
+    justify-content: space-between;
     column-gap: 1.4rem;
   }
 }
@@ -75,36 +71,50 @@
 
 .book-card:hover,
 .book-card:focus-visible {
-  transform: translateY(-10px) rotate(-1.5deg);
-  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.45));
+  transform: translateY(-8px) rotate(-1.5deg);
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.4));
 }
 
 .book-card:focus-visible {
   outline: 2px solid #fdff77;
   outline-offset: 4px;
-  border-radius: 6px;
+  border-radius: 12px;
 }
 
-/* 表紙（＝本そのもの。エンドカード + タイトル帯を内包） */
+/* 表紙（＝ガラスの本。エンドカード + タイトル帯を内包） */
 .book-cover {
   position: relative;
   display: block;
   width: 100%;
   height: 100%;
-  border-radius: 3px 8px 8px 3px;
+  border-radius: 8px;
   overflow: hidden;
-  background: linear-gradient(135deg, #1c2a52, #0a0f24);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.14),
+    rgba(180, 200, 255, 0.05) 40%,
+    rgba(10, 15, 36, 0.35)
+  );
+  backdrop-filter: blur(4px);
   box-shadow:
-    inset 6px 0 0 rgba(0, 0, 0, 0.35),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-    0 6px 14px rgba(0, 0, 0, 0.5);
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25),
+    inset -6px -10px 20px rgba(0, 0, 0, 0.25),
+    0 10px 22px rgba(0, 0, 0, 0.35);
+  transition: box-shadow 0.28s ease;
+}
+
+@media (min-width: 640px) {
+  .book-cover {
+    border-radius: 10px;
+  }
 }
 
 .book-cover-img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* 👈 cover から contain に変更 */
-  object-position: center; /* 中央寄せ */
+  object-fit: contain;
+  object-position: center;
   display: block;
 }
 
@@ -117,53 +127,112 @@
   color: rgba(254, 240, 138, 0.6);
 }
 
-/* 表紙の光沢演出 */
+/* ガラスに色ガラスの膜をかける（画像の上から色付け） */
+.book-cover-tint {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  opacity: 0.85;
+}
+
+/* ガラスの反射・光の筋 */
 .book-cover-shine {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0.16) 0%,
-    rgba(255, 255, 255, 0) 30%
-  );
+  z-index: 2;
   pointer-events: none;
+  background:
+    linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.35) 0%,
+      rgba(255, 255, 255, 0.08) 18%,
+      rgba(255, 255, 255, 0) 32%
+    ),
+    linear-gradient(
+      65deg,
+      rgba(255, 255, 255, 0) 70%,
+      rgba(255, 255, 255, 0.18) 85%,
+      rgba(255, 255, 255, 0) 100%
+    );
+}
+
+.book-top-bar {
+  position: absolute;
+  top: -0.45rem;
+  left: -0.25rem;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  transform: rotate(-6deg);
+}
+
+@media (min-width: 640px) {
+  .book-top-bar {
+    top: -0.55rem;
+    left: -0.35rem;
+    gap: 0.3rem;
+  }
 }
 
 /* 連番バッジ（図書ラベル風・左上） */
 .book-number-badge {
-  position: absolute;
-  top: -0.5rem;
-  left: -0.35rem;
-  z-index: 2;
-  min-width: 1.6rem;
-  height: 1.6rem;
-  padding: 0 0.3rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 1.3rem;
+  padding: 0 0.4rem;
   border-radius: 999px;
   background: linear-gradient(135deg, #fdff77, #fef08a);
   color: #1c1204;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-  transform: rotate(-8deg);
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
-/* 日付バッジ（右上） */
-.book-date-badge {
+@media (min-width: 640px) {
+  .book-number-badge {
+    height: 1.6rem;
+    padding: 0 0.55rem;
+    font-size: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* 日付バッジ（表紙＝サムネイルの上に重ねる） */
+.book-date-chip {
   position: absolute;
-  top: 0.35rem;
-  right: 0.35rem;
-  z-index: 2;
-  padding: 0.1rem 0.4rem;
+  top: 0.3rem;
+  right: 0.3rem;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  height: 1.1rem;
+  padding: 0 0.35rem;
   border-radius: 999px;
-  background: rgba(10, 15, 36, 0.65);
-  color: rgba(191, 239, 255, 0.9);
-  font-size: 0.65rem;
-  letter-spacing: 0.02em;
-  backdrop-filter: blur(2px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(10, 15, 36, 0.55);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.55rem;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+}
+
+@media (min-width: 640px) {
+  .book-date-chip {
+    top: 0.4rem;
+    right: 0.4rem;
+    height: 1.35rem;
+    padding: 0 0.45rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.02em;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  }
 }
 
 /* タイトル帯（表紙下部に重なるオビ） */
@@ -172,33 +241,90 @@
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1;
-  padding: 1.5rem 0.5rem 0.5rem;
+  z-index: 3;
+  padding: 1.2rem 0.3rem 0.35rem;
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.82) 0%,
-    rgba(0, 0, 0, 0.55) 55%,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.5) 60%,
     rgba(0, 0, 0, 0) 100%
   );
   display: flex;
   align-items: flex-end;
 }
 
+@media (min-width: 640px) {
+  .book-title-scrim {
+    padding: 1.5rem 0.5rem 0.5rem;
+  }
+}
+
 .book-title-text {
   width: 100%;
-  font-size: 0.78rem;
-  line-height: 1.3;
+  font-size: 0.68rem;
+  line-height: 1.25;
   color: #ffffff;
   text-align: center;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 @media (min-width: 640px) {
   .book-title-text {
     font-size: 0.85rem;
+    line-height: 1.3;
   }
+}
+
+/* -------------------------------------------------------------
+   ジャンル別の色ガラス（透明感アップ版）
+   murder = マーダーミステリー / story = ストーリープレイング / other = その他
+   ------------------------------------------------------------- */
+
+/* --- murder (マーダーミステリー) --- */
+.book-cover[data-genre="murder"] .book-cover-tint {
+  background: linear-gradient(135deg, rgba(255, 179, 198, 0.25), rgba(255, 214, 224, 0.05));
+}
+.book-cover[data-genre="murder"] {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 0 0 1px rgba(255, 179, 198, 0.3),
+    inset -6px -10px 20px rgba(120, 20, 45, 0.08),
+    0 10px 22px rgba(0, 0, 0, 0.25),
+    0 0 15px rgba(255, 179, 198, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* --- story (ストーリープレイング：明るいパステル水色版) --- */
+.book-cover[data-genre="story"] .book-cover-tint {
+  background: linear-gradient(135deg, rgba(135, 226, 255, 0.35), rgba(200, 245, 255, 0.08));
+}
+.book-cover[data-genre="story"] {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 0 0 1px rgba(135, 226, 255, 0.45),
+    inset -6px -10px 20px rgba(0, 80, 140, 0.08),
+    0 10px 22px rgba(0, 0, 0, 0.25),
+    0 0 18px rgba(135, 226, 255, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* --- other (その他) --- */
+.book-cover[data-genre="other"] .book-cover-tint {
+  background: linear-gradient(135deg, rgba(178, 235, 200, 0.25), rgba(214, 250, 226, 0.05));
+}
+.book-cover[data-genre="other"] {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 0 0 1px rgba(178, 235, 200, 0.3),
+    inset -6px -10px 20px rgba(15, 80, 45, 0.08),
+    0 10px 22px rgba(0, 0, 0, 0.25),
+    0 0 15px rgba(178, 235, 200, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }

@@ -129,7 +129,9 @@
   margin-top: 0.2rem;
 }
 
-/* リンクボタン群（公式・配信） */
+/* -------------------------------------------------------------
+   リンクボタン群（公式・配信）
+   ------------------------------------------------------------- */
 .report-detail-links {
   display: flex;
   align-items: center;
@@ -138,42 +140,57 @@
   margin-top: 0.5rem;
 }
 
+/* ベースとなるボタンのスタイル（2枚目のデザインベース） */
 .report-detail-link-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.45rem 0.9rem;
-  border-radius: 999px;
+  gap: 0.375rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
   font-size: 0.8rem;
   font-family: 'Yomogi', cursive, sans-serif;
   text-decoration: none;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
 }
 
-/* 公式ボタン（黄色×水色グラデ） */
+@media (min-width: 640px) {
+  .report-detail-link-btn {
+    padding: 0.45rem 1.1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* 公式ボタン（青〜淡水色系の透け感デザイン） */
 .official-btn {
-  color: #0a0f24;
-  background: linear-gradient(120deg, #fdff77, #bfefff);
-  box-shadow: 0 0 12px rgba(253, 255, 119, 0.35);
+  background: rgba(165, 188, 252, 0.12);
+  color: #e8eeff;
+  border: 1px solid rgba(165, 188, 252, 0.35);
 }
 
 .official-btn:hover {
-  box-shadow: 0 0 18px rgba(253, 255, 119, 0.55);
+  background: rgba(165, 188, 252, 0.22);
+  border-color: rgba(165, 188, 252, 0.55);
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(165, 188, 252, 0.2);
   transform: translateY(-1px);
 }
 
-/* 配信ボタン（ピンク×赤系ネオン） */
+/* 配信ボタン（ピンク〜赤系の透け感デザイン） */
 .stream-btn {
-  color: #ffffff;
-  background: linear-gradient(120deg, #ff758c, #ff7eb3);
-  box-shadow: 0 0 12px rgba(255, 117, 140, 0.35);
+  background: rgba(252, 165, 165, 0.1);
+  color: #ffe4e6;
+  border: 1px solid rgba(252, 165, 165, 0.3);
 }
 
 .stream-btn:hover {
-  box-shadow: 0 0 18px rgba(255, 117, 140, 0.55);
+  background: rgba(252, 165, 165, 0.2);
+  border-color: rgba(252, 165, 165, 0.5);
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(252, 165, 165, 0.2);
   transform: translateY(-1px);
 }
-
 
 /* -------------------------------------------------------------
    参加メンバー セクション（シンプルテーブル）

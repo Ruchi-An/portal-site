@@ -6,7 +6,7 @@ import {
   CalendarDays, Clock, Theater, Link as LinkIcon, Radio, Bird, X,
   Sunrise, Sun, Moon, MoonStar, Sparkles 
 } from "lucide-react";
-import WatermarkedImage from "../WatermarkedImage";
+import WatermarkedImage from "../../WatermarkedImage";
 
 // カテゴリ用スタイルマッピング
 const CATEGORY_STYLES: Record<string, string> = {
