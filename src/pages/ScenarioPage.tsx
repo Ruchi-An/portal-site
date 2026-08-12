@@ -1,5 +1,5 @@
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
-import { BookMarked, Theater } from "lucide-react";
+import { BookMarked, Cross } from "lucide-react";
 import ReportBookshelf from "../features/scenario/ReportBookshelf";
 import GmAvailableList from "../features/scenario/GmAvailableList";
 import "./ScenarioPage.css";
@@ -7,7 +7,7 @@ import "./ScenarioPage.css";
 // 「通過予定」タブは廃止し、通過報告に統合しました
 const SCENARIO_TABS = [
   { to: "/scenario/passed", label: "通過報告", icon: BookMarked },
-  { to: "/scenario/gm", label: "GM可能", icon: Theater },
+  { to: "/scenario/gm", label: "GM可能", icon: Cross },
 ] as const;
 
 export default function ScenarioPage() {
