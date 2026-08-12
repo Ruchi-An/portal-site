@@ -168,64 +168,71 @@ export default function ScheduleCard({ schedule }: Props) {
             )}
           </div>
 
-          {/* リンクボタン群 */}
-          {!isReal && (
-            <div className="schedule-card-actions font-yomogi">
-              {officialUrl ? (
-                <a
-                  href={officialUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="schedule-btn schedule-btn-official"
-                >
-                  <LinkIcon size={14} />
-                  公式ページ
-                </a>
-              ) : (
-                <span className="schedule-btn schedule-btn-disabled">
-                  <LinkIcon size={14} />
-                  公式
-                </span>
-              )}
+{/* リンクボタン群 */}
+{!isReal && (
+  <div className="schedule-card-actions font-yomogi">
+    {/* --- 公式ボタン --- */}
+    {officialUrl ? (
+      <a
+        href={officialUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="schedule-btn schedule-btn-official"
+      >
+        <LinkIcon size={14} />
+        <span className="btn-text-short">公式</span>
+        <span className="btn-text-full">公式ページ</span>
+      </a>
+    ) : (
+      <span className="schedule-btn schedule-btn-disabled">
+        <LinkIcon size={14} />
+        <span className="btn-text-short">公式</span>
+        <span className="btn-text-full">公式ページ</span>
+      </span>
+    )}
 
-              {schedule.stream_url ? (
-                <a
-                  href={schedule.stream_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={handleStreamClick}
-                  className="schedule-btn schedule-btn-stream"
-                >
-                  <Radio size={14} />
-                  配信を見る
-                </a>
-              ) : (
-                <span className="schedule-btn schedule-btn-disabled">
-                  <Radio size={14} />
-                  配信
-                </span>
-              )}
+    {/* --- 配信ボタン --- */}
+    {schedule.stream_url ? (
+      <a
+        href={schedule.stream_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={handleStreamClick}
+        className="schedule-btn schedule-btn-stream"
+      >
+        <Radio size={14} />
+        <span className="btn-text-short">配信</span>
+        <span className="btn-text-full">配信を見る</span>
+      </a>
+    ) : (
+      <span className="schedule-btn schedule-btn-disabled">
+        <Radio size={14} />
+        <span className="btn-text-short">配信</span>
+        <span className="btn-text-full">配信を見る</span>
+      </span>
+    )}
 
-              {/* 👈 ③ 分類＝シナリオ のときだけ表示する詳細ボタン */}
-              {schedule.category === "シナリオ" && schedule.role === "PL" && (
-                scheduleId ? (
-                  <Link
-                    to={`/scenario/report/${scheduleId}`} // プロジェクトのルーティングパスに合わせて調整
-                    className="schedule-btn schedule-btn-detail"
-                  >
-                    <FileText size={14} />
-                    通過詳細
-                  </Link>
-                ) : (
-                  <span className="schedule-btn schedule-btn-disabled">
-                    <FileText size={14} />
-                    詳細
-                  </span>
-                )
-              )}
-            </div>
-          )}
-
+    {/* --- 詳細ボタン（分類＝シナリオ かつ 担当＝PL のとき） --- */}
+    {schedule.category === "シナリオ" && schedule.role === "PL" && (
+      scheduleId ? (
+        <Link
+          to={`/scenario/report/${scheduleId}`}
+          className="schedule-btn schedule-btn-detail"
+        >
+          <FileText size={14} />
+          <span className="btn-text-short">報告</span>
+          <span className="btn-text-full">通過報告</span>
+        </Link>
+      ) : (
+        <span className="schedule-btn schedule-btn-disabled">
+          <FileText size={14} />
+          <span className="btn-text-short">報告</span>
+          <span className="btn-text-full">通過報告</span>
+        </span>
+      )
+    )}
+  </div>
+)}
         </div>
       </div>
 
