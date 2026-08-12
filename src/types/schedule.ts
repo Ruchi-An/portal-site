@@ -19,6 +19,7 @@ export type Schedule = {
   } | null;
 
   scenarios?: {
+    id: string;
     genre: string | null;
     official_url: string | null;
   } | null;

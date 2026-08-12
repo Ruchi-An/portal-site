@@ -15,22 +15,36 @@
   display: grid;
   /* スマホではきっちり3列にする */
   grid-template-columns: repeat(3, 1fr);
-  column-gap: 0.5rem;
+  column-gap: 1.0rem;
   row-gap: var(--shelf-row-gap);
   grid-auto-rows: var(--book-h);
   align-items: end;
   padding: 0.5rem 0.25rem 1rem;
   min-width: 0;
 
+  /* ★ 白く光る幻想的なガラス棚板 ★ */
   background-image: repeating-linear-gradient(
     to bottom,
     transparent 0,
     transparent calc(var(--book-h) + (var(--shelf-row-gap) - var(--shelf-plank-h)) / 2),
-    #4a3524 calc(var(--book-h) + (var(--shelf-row-gap) - var(--shelf-plank-h)) / 2),
-    #2e2013 calc(var(--book-h) + (var(--shelf-row-gap) + var(--shelf-plank-h)) / 2),
-    transparent calc(var(--book-h) + (var(--shelf-row-gap) + var(--shelf-plank-h)) / 2),
+    
+    /* 上面のハイライト（一番強く光るライン） */
+    rgba(255, 255, 255, 0.95) calc(var(--book-h) + (var(--shelf-row-gap) - var(--shelf-plank-h)) / 2),
+    
+    /* 棚板本体（白〜淡い水色の幻想的なグラデーション） */
+    rgba(220, 240, 255, 0.4) calc(var(--book-h) + (var(--shelf-row-gap) - var(--shelf-plank-h)) / 2 + 1px),
+    rgba(255, 255, 255, 0.15) calc(var(--book-h) + (var(--shelf-row-gap) + var(--shelf-plank-h)) / 2 - 1px),
+    
+    /* 底面のうっすらとした影/光の縁取り */
+    rgba(180, 220, 255, 0.5) calc(var(--book-h) + (var(--shelf-row-gap) + var(--shelf-plank-h)) / 2),
+    
+    transparent calc(var(--book-h) + (var(--shelf-row-gap) + var(--shelf-plank-h)) / 2 + 1px),
     transparent calc(var(--book-h) + var(--shelf-row-gap))
   );
+  
+  /* 棚板自体のグロー（光彩）効果と影 */
+  filter: drop-shadow(0 2px 8px rgba(191, 239, 255, 0.35));
+
   background-size: 100% calc(var(--book-h) + var(--shelf-row-gap));
   background-position: top center;
   background-repeat: repeat-y;

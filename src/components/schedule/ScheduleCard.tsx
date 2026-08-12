@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { createPortal } from "react-dom"; // 👈 ① これを追加！
+import { createPortal } from "react-dom";
+import { Link } from "react-router-dom"; // 👈 ① ルーティング用のLinkをインポート
 import type { Schedule } from "../../types/schedule";
 import "./ScheduleCard.css";
 import { 
   CalendarDays, Clock, Theater, Link as LinkIcon, Radio, Bird, X,
-  Sunrise, Sun, Moon, MoonStar, Sparkles 
+  Sunrise, Sun, Moon, MoonStar, Sparkles, FileText // 👈 ② アイコンを追加 (BookOpen等でもOK)
 } from "lucide-react";
 import WatermarkedImage from "../../WatermarkedImage";
 
@@ -58,6 +59,9 @@ export default function ScheduleCard({ schedule }: Props) {
       : null;
 
   const genre = schedule.scenarios?.genre ?? schedule.games?.genre;
+
+  // シナリオ詳細画面へのパス（データ構造に合わせて適宜調整してね！）
+  const scheduleId = schedule.id;
 
   const handleStreamClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (schedule.category === "シナリオ") {
@@ -175,7 +179,7 @@ export default function ScheduleCard({ schedule }: Props) {
                   className="schedule-btn schedule-btn-official"
                 >
                   <LinkIcon size={14} />
-                  公式
+                  公式ページ
                 </a>
               ) : (
                 <span className="schedule-btn schedule-btn-disabled">
@@ -193,7 +197,7 @@ export default function ScheduleCard({ schedule }: Props) {
                   className="schedule-btn schedule-btn-stream"
                 >
                   <Radio size={14} />
-                  配信
+                  配信を見る
                 </a>
               ) : (
                 <span className="schedule-btn schedule-btn-disabled">
@@ -201,16 +205,33 @@ export default function ScheduleCard({ schedule }: Props) {
                   配信
                 </span>
               )}
+
+              {/* 👈 ③ 分類＝シナリオ のときだけ表示する詳細ボタン */}
+              {schedule.category === "シナリオ" && schedule.role === "PL" && (
+                scheduleId ? (
+                  <Link
+                    to={`/scenario/report/${scheduleId}`} // プロジェクトのルーティングパスに合わせて調整
+                    className="schedule-btn schedule-btn-detail"
+                  >
+                    <FileText size={14} />
+                    通過詳細
+                  </Link>
+                ) : (
+                  <span className="schedule-btn schedule-btn-disabled">
+                    <FileText size={14} />
+                    詳細
+                  </span>
+                )
+              )}
             </div>
           )}
 
         </div>
       </div>
 
-      {/* 👈 ② モーダル部分を createPortal で body 直下に吹き飛ばす！ */}
+      {/* モーダル部分 */}
       {isImageOpen && schedule.thumbnail_url && createPortal(
         <div className="image-modal-overlay" onClick={() => setIsImageOpen(false)}>
-          {/* 閉じるボタン */}
           <button className="image-modal-close" onClick={() => setIsImageOpen(false)}>
             <X size={24} />
           </button>
@@ -223,7 +244,7 @@ export default function ScheduleCard({ schedule }: Props) {
             />
           </div>
         </div>,
-        document.body // 👈 第2引数に document.body を指定
+        document.body
       )}
     </>
   );
